@@ -1,0 +1,11 @@
+{
+    "name": "Jukebox",
+    "version": "0.0.0",
+    "description": "Jukebox for MPD",
+    "dependencies": {
+        "socket.io": "latest",
+        "express": "latest",
+        "jade": "latest"
+    },
+    "author": "Joppe Aarts"
+}
