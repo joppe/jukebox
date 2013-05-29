@@ -2,21 +2,18 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="8a148655-899d-4664-8dbf-8091a07e9794" name="Default" comment="">
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/.gitignore" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/server/mpd.js" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/package.json" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/server/tpl/page.jade" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/doc/resources.md" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/doc/server.js" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/server/server.js" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/doc/test-mpd.js" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/server/mpd.js" afterPath="$PROJECT_DIR$/server/mpd/mpd.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/jsLibraryMappings.xml" afterPath="$PROJECT_DIR$/.idea/jsLibraryMappings.xml" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/doc/resources.md" afterPath="$PROJECT_DIR$/doc/resources.md" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
     </list>
     <ignored path="jukebox.iws" />
     <ignored path=".idea/workspace.xml" />
-    <file path="/Dummy.txt" changelist="8a148655-899d-4664-8dbf-8091a07e9794" time="1369770411615" ignored="false" />
+    <file path="/Dummy.txt" changelist="8a148655-899d-4664-8dbf-8091a07e9794" time="1369848638842" ignored="false" />
     <file path="/page.jade" changelist="8a148655-899d-4664-8dbf-8091a07e9794" time="1369665182318" ignored="false" />
     <file path="/server.js" changelist="8a148655-899d-4664-8dbf-8091a07e9794" time="1369772541716" ignored="false" />
     <file path="/mpd.js" changelist="8a148655-899d-4664-8dbf-8091a07e9794" time="1369772517787" ignored="false" />
+    <file path="/resources.md" changelist="8a148655-899d-4664-8dbf-8091a07e9794" time="1369772784775" ignored="false" />
     <option name="TRACKING_ENABLED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -38,22 +35,20 @@
     <splitter split-orientation="vertical" split-proportion="0.625">
       <split-first>
         <leaf>
-          <file leaf-file-name="server.js" pinned="false" current="true" current-in-tab="true">
+          <file leaf-file-name="server.js" pinned="false" current="false" current-in-tab="false">
             <entry file="file://$PROJECT_DIR$/server/server.js">
               <provider selected="true" editor-type-id="text-editor">
-                <state line="18" column="17" selection-start="368" selection-end="368" vertical-scroll-proportion="0.512334">
+                <state line="18" column="17" selection-start="368" selection-end="368" vertical-scroll-proportion="0.0">
                   <folding />
                 </state>
               </provider>
             </entry>
           </file>
-          <file leaf-file-name="mpd.js" pinned="false" current="false" current-in-tab="false">
-            <entry file="file://$PROJECT_DIR$/server/mpd.js">
+          <file leaf-file-name="mpd.js" pinned="false" current="true" current-in-tab="true">
+            <entry file="file://$PROJECT_DIR$/server/mpd/mpd.js">
               <provider selected="true" editor-type-id="text-editor">
-                <state line="64" column="0" selection-start="1543" selection-end="1543" vertical-scroll-proportion="0.0">
-                  <folding>
-                    <element signature="e#652#722#0" expanded="false" />
-                  </folding>
+                <state line="58" column="18" selection-start="1393" selection-end="1393" vertical-scroll-proportion="1.6477273">
+                  <folding />
                 </state>
               </provider>
             </entry>
@@ -61,12 +56,9 @@
           <file leaf-file-name="resources.md" pinned="false" current="false" current-in-tab="false">
             <entry file="file://$PROJECT_DIR$/doc/resources.md">
               <provider selected="true" editor-type-id="text-editor">
-                <state line="2" column="0" selection-start="143" selection-end="143" vertical-scroll-proportion="-1.1538461">
+                <state line="7" column="5" selection-start="248" selection-end="248" vertical-scroll-proportion="0.0">
                   <folding />
                 </state>
-              </provider>
-              <provider editor-type-id="MarkdownPreviewEditor">
-                <state />
               </provider>
             </entry>
           </file>
@@ -77,7 +69,7 @@
           <file leaf-file-name="test-mpd.js" pinned="false" current="false" current-in-tab="true">
             <entry file="file://$PROJECT_DIR$/doc/test-mpd.js">
               <provider selected="true" editor-type-id="text-editor">
-                <state line="5" column="37" selection-start="178" selection-end="203" vertical-scroll-proportion="0.25083613">
+                <state line="4" column="4" selection-start="125" selection-end="125" vertical-scroll-proportion="0.07666667">
                   <folding />
                 </state>
               </provider>
@@ -118,6 +110,7 @@
         <option value="$PROJECT_DIR$/doc/server.js" />
         <option value="$PROJECT_DIR$/server/mpd.js" />
         <option value="$PROJECT_DIR$/server/server.js" />
+        <option value="$PROJECT_DIR$/doc/resources.md" />
       </list>
     </option>
   </component>
@@ -214,6 +207,24 @@
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
             <PATH_ELEMENT>
+              <option name="myItemId" value="server" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="mpd" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="jukebox" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="jukebox" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
               <option name="myItemId" value="doc" />
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
@@ -230,10 +241,12 @@
     <property name="options.splitter.details.proportions" value="0.2" />
     <property name="options.searchVisible" value="true" />
   </component>
+  <component name="RecentsManager">
+    <key name="MoveFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$/server/mpd" />
+    </key>
+  </component>
   <component name="RunManager">
-    <configuration default="true" type="NodeJSConfigurationType" factoryName="Node.js" working-dir="$PROJECT_DIR$">
-      <method />
-    </configuration>
     <list size="0" />
   </component>
   <component name="ShelveChangesManager" show_recycled="false" />
@@ -247,13 +260,13 @@
   </component>
   <component name="ToolWindowManager">
     <frame x="0" y="31" width="1288" height="1035" extended-state="0" />
-    <editor active="true" />
+    <editor active="false" />
     <layout>
       <window_info id="Changes" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
       <window_info id="Database" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
-      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.24032257" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
+      <window_info id="Project" active="true" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.2483871" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
       <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.4" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="2" side_tool="true" content_ui="tabs" />
       <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="true" content_ui="tabs" />
@@ -338,16 +351,12 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/server/tpl/page.jade">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="8" column="51" selection-start="184" selection-end="184" vertical-scroll-proportion="0.0">
-          <folding />
-        </state>
+        <state line="8" column="51" selection-start="184" selection-end="184" vertical-scroll-proportion="0.0" />
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/package.json">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="9" column="26" selection-start="227" selection-end="227" vertical-scroll-proportion="0.0">
-          <folding />
-        </state>
+        <state line="9" column="26" selection-start="227" selection-end="227" vertical-scroll-proportion="0.0" />
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/server/server.js">
@@ -359,16 +368,12 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/server/tpl/page.jade">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="8" column="51" selection-start="184" selection-end="184" vertical-scroll-proportion="0.0">
-          <folding />
-        </state>
+        <state line="8" column="51" selection-start="184" selection-end="184" vertical-scroll-proportion="0.0" />
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/package.json">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="9" column="26" selection-start="227" selection-end="227" vertical-scroll-proportion="0.0">
-          <folding />
-        </state>
+        <state line="9" column="26" selection-start="227" selection-end="227" vertical-scroll-proportion="0.0" />
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/server/server.js">
@@ -380,23 +385,17 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/server/tpl/page.jade">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="8" column="51" selection-start="184" selection-end="184" vertical-scroll-proportion="0.0">
-          <folding />
-        </state>
+        <state line="8" column="51" selection-start="184" selection-end="184" vertical-scroll-proportion="0.0" />
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/package.json">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="9" column="26" selection-start="227" selection-end="227" vertical-scroll-proportion="0.0">
-          <folding />
-        </state>
+        <state line="9" column="26" selection-start="227" selection-end="227" vertical-scroll-proportion="0.0" />
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/package.json">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="9" column="26" selection-start="227" selection-end="227" vertical-scroll-proportion="-5.625">
-          <folding />
-        </state>
+        <state line="9" column="26" selection-start="227" selection-end="227" vertical-scroll-proportion="-5.625" />
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/doc/server.js">
@@ -408,40 +407,36 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/server/tpl/page.jade">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="8" column="51" selection-start="184" selection-end="184" vertical-scroll-proportion="0.2877698">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/doc/resources.md">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="2" column="0" selection-start="143" selection-end="143" vertical-scroll-proportion="-1.1538461">
-          <folding />
-        </state>
-      </provider>
-      <provider editor-type-id="MarkdownPreviewEditor">
-        <state />
+        <state line="8" column="51" selection-start="184" selection-end="184" vertical-scroll-proportion="0.2877698" />
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/doc/test-mpd.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="5" column="37" selection-start="178" selection-end="203" vertical-scroll-proportion="0.25083613">
+        <state line="4" column="4" selection-start="125" selection-end="125" vertical-scroll-proportion="0.07666667">
           <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/server/mpd.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="64" column="0" selection-start="1543" selection-end="1543" vertical-scroll-proportion="0.0">
-          <folding>
-            <element signature="e#652#722#0" expanded="false" />
-          </folding>
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/server/server.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="18" column="17" selection-start="368" selection-end="368" vertical-scroll-proportion="0.512334">
+        <state line="18" column="17" selection-start="368" selection-end="368" vertical-scroll-proportion="0.0">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/doc/resources.md">
+      <provider editor-type-id="MarkdownPreviewEditor">
+        <state />
+      </provider>
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="7" column="5" selection-start="248" selection-end="248" vertical-scroll-proportion="0.0">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/server/mpd/mpd.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="58" column="18" selection-start="1393" selection-end="1393" vertical-scroll-proportion="1.6477273">
           <folding />
         </state>
       </provider>
