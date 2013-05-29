@@ -1,15 +1,15 @@
+'use strict';
+
 var express = require('express'),
-    mpd = require('./mpd.js'),
-    client = mpd.connect({
-        port: 6600,
-        host: 'localhost'
-    }),
+    socket = require('./mpd/socket.js'),
+    connection = socket.connect(6600, 'localhost'),
+    mpdc = require('./mpd/client.js').create(connection),
     app = express(),
     port = 3700;
 
-//client.kill();
-client.status(function (data) {
-    console.log('data', data.toString());
+
+mpdc.status(function (data) {
+    console.log('mpdc data', data.toString());
 });
 
 app.get('/', function (req, res) {

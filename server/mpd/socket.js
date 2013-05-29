@@ -4,13 +4,18 @@ module.exports = (function () {
     var net = require('net');
 
     function create() {
-        var connection;
+        var socket;
 
-        connection = {
+        socket = {
             connected: false,
             inprogress: false,
             client: null,
             queue: [],
+
+            /**
+             * @param {Number} port
+             * @param {String} host
+             */
             connect: function (port, host) {
                 this.client = net.connect({
                     port: port,
@@ -18,25 +23,30 @@ module.exports = (function () {
                 });
 
                 this.client.on('connect', function () {
-                    console.log('connect');
-                    connection.connected = true;
-                    connection.processQueue();
+                    socket.connected = true;
+                    socket.processQueue();
                 });
 
                 this.client.on('data', function (data) {
                     var command;
 
-                    connection.inprogress = false;
+                    socket.inprogress = false;
 
-                    if (connection.queue.length) {
-                        command = connection.queue.shift();
+                    if (socket.queue.length) {
+                        command = socket.queue.shift();
                         command.callback(data);
                     }
 
-                    connection.processQueue();
+                    socket.processQueue();
                 });
 
             },
+
+            /**
+             *
+             * @param {String} command
+             * @param {Function} callback
+             */
             command: function (command, callback) {
                 this.queue.push({
                     command: command,
@@ -45,6 +55,7 @@ module.exports = (function () {
 
                 this.processQueue();
             },
+
             processQueue: function () {
                 if (this.connected && !this.inprogress && this.queue.length) {
                     this.inprogress = true;
@@ -53,18 +64,18 @@ module.exports = (function () {
             }
         };
 
-        return connection;
+        return socket;
     }
 
     return {
-        create: function (port, host) {
-            var connection = create();
+        connect: function (port, host) {
+            var socket = create();
 
-            connection.connect(port, host);
+            socket.connect(port, host);
 
             return {
                 command: function (command, callback) {
-                    connection.command(command, callback);
+                    socket.command(command, callback);
                 }
             };
         }
