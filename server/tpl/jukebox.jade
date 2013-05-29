@@ -1,0 +1,20 @@
+!!!
+html
+    head
+        title='Jukebox'
+        link(rel='stylesheet', type='text/css', media='screen', href='/css/bootstrap.min.css')
+        script(type='text/javascript', src='/js/3rd-party/jquery-1.10.0.min.js')
+        script(type='text/javascript', src='/js/global.js')
+
+    body
+        header
+            h1 Jukebox
+        section
+            div#playback
+                a.btn(href="/playback/play")
+                    i.icon-play
+                a.btn(href="/playback/pause")
+                    i.icon-pause
+                a.btn(href="/playback/stop")
+                    i.icon-stop
+        footer

@@ -3,14 +3,33 @@ module.exports = (function () {
 
     var net = require('net');
 
+    function processData(data, callback, errorHandler) {
+        var lines = data.toString().split('\n');
+
+        console.log(lines);
+        callback(data);
+    }
+
     function create() {
-        var socket;
+        var socket,
+            errorHandler = function (message) {
+                console.log(message);
+            };
 
         socket = {
             connected: false,
             inprogress: false,
             client: null,
             queue: [],
+
+            addErrorHandler: function (callback) {
+                var oldHandler = errorHandler;
+
+                errorHandler = function () {
+                    callback();
+                    oldHandler();
+                };
+            },
 
             /**
              * @param {Number} port
@@ -28,26 +47,29 @@ module.exports = (function () {
                 });
 
                 this.client.on('data', function (data) {
-                    var command;
+                    var command,
+                        callback = function () {};
 
                     socket.inprogress = false;
 
                     if (socket.queue.length) {
                         command = socket.queue.shift();
-                        command.callback(data);
+                        callback = command.callback;
                     }
 
+                    processData(data, callback, errorHandler);
                     socket.processQueue();
                 });
 
             },
 
             /**
-             *
              * @param {String} command
-             * @param {Function} callback
+             * @param {Function} [callback]
              */
             command: function (command, callback) {
+                callback = callback !== undefined ? callback : function () {};
+
                 this.queue.push({
                     command: command,
                     callback: callback
