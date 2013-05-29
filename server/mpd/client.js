@@ -1,3 +1,13 @@
+module.exports = (function () {
+    'use strict';
+
+    return {
+        create: function (connection) {
+
+        }
+    };
+}());
+
 var net = require('net'),
     client;
 
