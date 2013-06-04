@@ -7,6 +7,7 @@ http://stackoverflow.com/questions/12418372/node-js-express-correct-use-of-bodyp
 
 MPD
 http://www.musicpd.org/doc/protocol/index.html
+http://crunchbang.org/forums/viewtopic.php?pid=182574
 https://wiki.archlinux.org/index.php/Mpd
 http://mpd.wikia.com/wiki/MusicPlayerDaemonProtocolOutline
 http://mpd.wikia.com/wiki/MusicPlayerDaemonCommands

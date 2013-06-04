@@ -39,8 +39,14 @@ module.exports = (function () {
                 connection.command('setvol ' + volume);
             },
 
-            status: function (callback) {
-                connection.command('status', callback);
+            status: {
+                status: function (callback) {
+                    connection.command('status', callback);
+                },
+
+                currentsong: function (callback) {
+                    connection.command('currentsong', callback);
+                }
             },
 
             kill: function () {

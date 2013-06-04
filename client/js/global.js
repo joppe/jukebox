@@ -1,6 +1,10 @@
-/*global jQuery*/
+/*global jQuery, MPD*/
 
 jQuery(function ($) {
+    'use strict';
+
+    var mpd = new MPD();
+
     $('#playback').find('a').on({
         click: function (event) {
             event.preventDefault();

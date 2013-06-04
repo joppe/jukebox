@@ -1,14 +1,29 @@
 module.exports = (function () {
     'use strict';
 
-    var net = require('net');
+    var net = require('net'),
+        processData;
 
-    function processData(data, callback, errorHandler) {
-        var lines = data.toString().split('\n');
+    processData = (function () {
+        var OK = /^OK$/,
+            ERROR = /^ACK/;
 
-        console.log(lines);
-        callback(data);
-    }
+        return function (data, callback, errorHandler) {
+            var lines;
+
+            if (data) {
+                lines = data.toString().replace(/\n$/, '').split('\n');
+
+                if (ERROR.test(lines[lines.length - 1])) {
+                    errorHandler(lines[lines.length - 1]);
+                }
+            } else {
+                errorHandler('No data received');
+            }
+            console.log(lines);
+            callback(data);
+        };
+    }());
 
     function create() {
         var socket,

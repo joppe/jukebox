@@ -31,6 +31,18 @@ app.get('/playback/:control', function (req, res) {
     res.send(control);
 });
 
+app.get('/status/:status', function (req, res) {
+    var status = req.params.status;
+
+    if (typeof mpdc.status[status] === 'function') {
+        mpdc.status[status](function () {
+            console.log('>>', status);
+        });
+    }
+
+    res.send(status);
+});
+
 app.listen(port);
 console.log('Listening on port 3000');
 console.log(__dirname + '/client');
