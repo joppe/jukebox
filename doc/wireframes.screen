@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<model:Screen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:model="http://wireframesketcher.com/1.0/model.ecore">
+  <widgets xsi:type="model:ProgressBar" id="1" x="160" y="330" width="147" measuredWidth="147" measuredHeight="18"/>
+  <widgets xsi:type="model:SearchField" id="2" x="370" y="400" text="Search" measuredWidth="72" measuredHeight="24">
+    <font/>
+  </widgets>
+  <widgets xsi:type="model:Label" id="3" x="160" y="300" text="Connected - Stereo MC's" measuredWidth="152" measuredHeight="22">
+    <font/>
+  </widgets>
+  <widgets xsi:type="model:Button" id="4" x="210" y="360" measuredWidth="36" measuredHeight="24" icon="play (small)">
+    <font/>
+  </widgets>
+  <widgets xsi:type="model:Button" id="5" x="260" y="360" measuredWidth="36" measuredHeight="24" icon="skip (small)">
+    <font/>
+  </widgets>
+  <widgets xsi:type="model:Button" id="6" x="160" y="360" measuredWidth="36" measuredHeight="24" icon="previous (small)">
+    <font/>
+  </widgets>
+  <widgets xsi:type="model:Button" id="7" x="160" y="260" measuredWidth="36" measuredHeight="24" icon="volume (small)">
+    <font/>
+  </widgets>
+  <widgets xsi:type="model:List" id="8" x="370" y="433" text="Item One&#xA;Item Two&#xA;Item Three&#xA;|Multiple&#xA;Selection&#xA;(bg:green)|Works like this&#xA;For List, Table and Tree" measuredWidth="147" measuredHeight="144">
+    <font/>
+    <items x="0" y="2" width="147" height="20" text="Item One"/>
+    <items x="0" y="22" width="147" height="20" text="Item Two"/>
+    <items x="0" y="42" width="147" height="20" text="Item Three"/>
+    <items x="0" y="62" width="147" height="20" text="|Multiple"/>
+    <items x="0" y="82" width="147" height="20" text="Selection"/>
+    <items x="0" y="102" width="147" height="20" text="(bg:green)|Works like this"/>
+    <items x="0" y="122" width="147" height="20" text="For List, Table and Tree"/>
+  </widgets>
+  <widgets xsi:type="model:List" id="9" x="160" y="430" text="Item One&#xA;Item Two&#xA;Item Three&#xA;|Multiple&#xA;Selection&#xA;(bg:green)|Works like this&#xA;For List, Table and Tree" measuredWidth="147" measuredHeight="144">
+    <font/>
+    <items x="0" y="2" width="147" height="20" text="Item One"/>
+    <items x="0" y="22" width="147" height="20" text="Item Two"/>
+    <items x="0" y="42" width="147" height="20" text="Item Three"/>
+    <items x="0" y="62" width="147" height="20" text="|Multiple"/>
+    <items x="0" y="82" width="147" height="20" text="Selection"/>
+    <items x="0" y="102" width="147" height="20" text="(bg:green)|Works like this"/>
+    <items x="0" y="122" width="147" height="20" text="For List, Table and Tree"/>
+  </widgets>
+  <widgets xsi:type="model:Label" id="10" x="160" y="401" text="Playlist" measuredWidth="46" measuredHeight="22">
+    <font/>
+  </widgets>
+  <hRuler/>
+  <vRuler/>
+  <font size="12px"/>
+</model:Screen>
