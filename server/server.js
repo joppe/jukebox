@@ -1,7 +1,9 @@
+/*global require, module,  __dirname */
+/*jslint node: true */
 'use strict';
 
 var express = require('express'),
-    socket = require('./mpd/socket.js'),
+    socket = require('./tcp/socket.js'),
     connection = socket.connect(6600, 'localhost'),
     mpdc = require('./mpd/client.js').create(connection),
     app = express(),
@@ -36,14 +38,14 @@ app.get('/status/:status', function (req, res) {
     var status = req.params.status;
 
     if (typeof mpdc.status[status] === 'function') {
-        mpdc.status[status](function () {
-            console.log('>>', status);
+        mpdc.status[status](function (response) {
+            res.send(response);
         });
+    } else {
+        res.send(status + ', command not supported');
     }
-
-    res.send(status);
 });
 
 app.listen(port);
-console.log('Listening on port 3000');
-console.log(__dirname + '/client');
+//console.log('Listening on port 3000');
+//console.log(__dirname + '/client');

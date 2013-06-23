@@ -1,50 +1,19 @@
+/*global require, module,  __dirname */
+/*jslint node: true */
+
 module.exports = (function () {
     'use strict';
 
-    var net = require('net'),
-        processData;
-
-    processData = (function () {
-        var OK = /^OK$/,
-            ERROR = /^ACK/;
-
-        return function (data, callback, errorHandler) {
-            var lines;
-
-            if (data) {
-                lines = data.toString().replace(/\n$/, '').split('\n');
-
-                if (ERROR.test(lines[lines.length - 1])) {
-                    errorHandler(lines[lines.length - 1]);
-                }
-            } else {
-                errorHandler('No data received');
-            }
-            console.log(lines);
-            callback(data);
-        };
-    }());
+    var net = require('net');
 
     function create() {
-        var socket,
-            errorHandler = function (message) {
-                console.log(message);
-            };
+        var socket;
 
         socket = {
             connected: false,
             inprogress: false,
             client: null,
             queue: [],
-
-            addErrorHandler: function (callback) {
-                var oldHandler = errorHandler;
-
-                errorHandler = function () {
-                    callback();
-                    oldHandler();
-                };
-            },
 
             /**
              * @param {Number} port
@@ -72,10 +41,9 @@ module.exports = (function () {
                         callback = command.callback;
                     }
 
-                    processData(data, callback, errorHandler);
+                    callback(data);
                     socket.processQueue();
                 });
-
             },
 
             /**
@@ -105,12 +73,21 @@ module.exports = (function () {
     }
 
     return {
+        /**
+         * @param {Number} port
+         * @param {String} host
+         * @returns {{command: Function}}
+         */
         connect: function (port, host) {
             var socket = create();
 
             socket.connect(port, host);
 
             return {
+                /**
+                 * @param {String} command
+                 * @param {Function} callback
+                 */
                 command: function (command, callback) {
                     socket.command(command, callback);
                 }

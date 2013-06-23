@@ -11,3 +11,6 @@ http://crunchbang.org/forums/viewtopic.php?pid=182574
 https://wiki.archlinux.org/index.php/Mpd
 http://mpd.wikia.com/wiki/MusicPlayerDaemonProtocolOutline
 http://mpd.wikia.com/wiki/MusicPlayerDaemonCommands
+
+Start mpd with specific config file
+mpd ~/.mpd/mpd.conf

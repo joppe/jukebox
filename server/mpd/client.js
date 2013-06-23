@@ -1,33 +1,62 @@
+/*global require, module,  __dirname */
+/*jslint node: true */
+
 module.exports = (function () {
     'use strict';
 
     function create(connection) {
-        var client;
+        var client,
+            command;
+
+        command = (function () {
+            var OK = /^OK$/,
+                ERROR = /^ACK/,
+                response = require('./response/response.js'),
+                parsedData;
+
+            return function (command, success, error) {
+                connection.command(command, function (data) {
+                    parsedData = response.create(data);
+
+                    if (!parsedData.hasError() && success) {
+                        success(parsedData);
+                    } else if (parsedData.hasError() && error) {
+                        error(parsedData);
+                    }
+                });
+            };
+        }());
 
         client = {
             playback: {
                 play: function () {
-                    connection.command('play');
+                    command('play');
                 },
 
                 stop: function () {
-                    connection.command('stop');
+                    command('stop');
                 },
 
                 next: function () {
-                    connection.command('next');
+                    command('next');
                 },
 
                 previous: function () {
-                    connection.command('previous');
+                    command('previous');
                 },
 
                 pause: function () {
-                    connection.command('pause 1');
+                    command('pause 1');
                 },
 
                 resume: function () {
-                    connection.command('pause 0');
+                    command('pause 0');
+                },
+
+                playid: function (id, success) {
+                    command('playid ' + id, function (response) {
+                        success(response.toJSON());
+                    });
                 }
             },
 
@@ -36,21 +65,77 @@ module.exports = (function () {
                 volume = isNaN(volume) ? 0 : volume;
                 volume = Math.max(0, Math.min(volume, 100));
 
-                connection.command('setvol ' + volume);
+                command('setvol ' + volume);
             },
 
             status: {
-                status: function (callback) {
-                    connection.command('status', callback);
+                status: function (success) {
+                    command('status', function (response) {
+                        success(response.toJSON());
+                    });
                 },
 
-                currentsong: function (callback) {
-                    connection.command('currentsong', callback);
+                stats: function (success) {
+                    command('stats', function (response) {
+                        success(response.toJSON());
+                    });
+                },
+
+                currentsong: function (success) {
+                    command('currentsong', function (response) {
+                        success(response.toJSON());
+                    });
+                }
+            },
+
+            playlist: {
+                playlistinfo: function (success) {
+                    command('playlistinfo', function (response) {
+                        success(response.toJSON());
+                    });
+                },
+
+                addid: function (uri, success) {
+                    command('addid ' + uri, function (response) {
+                        success(response.toJSON());
+                    });
+                },
+
+                deleteid: function (id, success) {
+                    command('deleteid ' + id, function (response) {
+                        success(response.toJSON());
+                    });
+                },
+
+                clear: function (success) {
+                    command('clear', function (response) {
+                        success(response.toJSON());
+                    });
+                },
+
+                shuffle: function (success) {
+                    command('shuffle', function (response) {
+                        success(response.toJSON());
+                    });
+                }
+            },
+
+            database: {
+                search: function (query, success) {
+                    command('search any ' + query, function (response) {
+                        success(response.toJSON());
+                    });
+                },
+
+                ls: function (query, success) {
+                    command('lsinfo', function (response) {
+                        success(response.toJSON());
+                    });
                 }
             },
 
             kill: function () {
-                connection.command('kill', function () {
+                command('kill', function () {
                     console.log('conncetion killed');
                 });
             }
