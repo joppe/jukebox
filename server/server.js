@@ -24,6 +24,10 @@ app.get('/', function (req, res) {
     res.render('jukebox');
 });
 
+app.get('/debug', function (req, res) {
+    res.render('debug');
+});
+
 app.get('/playback/:control', function (req, res) {
     var control = req.params.control;
 
@@ -32,6 +36,13 @@ app.get('/playback/:control', function (req, res) {
     }
 
     res.send(control);
+});
+
+app.get('/playback/volume/:volume', function (req, res) {
+    var volume = req.params.volume;
+
+    mpdc.playback.volume(volume);
+    res.send(volume);
 });
 
 app.get('/status/:status', function (req, res) {
@@ -44,6 +55,56 @@ app.get('/status/:status', function (req, res) {
     } else {
         res.send(status + ', command not supported');
     }
+});
+
+app.get('/playlist/playlistinfo', function (req, res) {
+    mpdc.playlist.playlistinfo(function (info) {
+        res.send(info);
+    });
+});
+
+app.get('/playlist/addid/:uri', function (req, res) {
+    var uri = req.params.uri;
+
+    mpdc.playlist.addid(uri, function (info) {
+        res.send(info);
+    });
+});
+
+app.get('/playlist/deleteid/:id', function (req, res) {
+    var id = req.params.id;
+
+    mpdc.playlist.deleteid(id, function (info) {
+        res.send(info);
+    });
+});
+
+app.get('/playlist/clear', function (req, res) {
+    mpdc.playlist.clear(function (info) {
+        res.send(info);
+    });
+});
+
+app.get('/playlist/shuffle', function (req, res) {
+    mpdc.playlist.shuffle(function (info) {
+        res.send(info);
+    });
+});
+
+app.get('/database/search/:query', function (req, res) {
+    var query = req.params.query;
+
+    mpdc.database.search(query, function (info) {
+        res.send(info);
+    });
+});
+
+app.get('/database/ls/:query', function (req, res) {
+    var query = req.params.query;
+
+    mpdc.database.ls(query, function (info) {
+        res.send(info);
+    });
 });
 
 app.listen(port);

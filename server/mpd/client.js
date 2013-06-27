@@ -9,9 +9,7 @@ module.exports = (function () {
             command;
 
         command = (function () {
-            var OK = /^OK$/,
-                ERROR = /^ACK/,
-                response = require('./response/response.js'),
+            var response = require('./response/response.js'),
                 parsedData;
 
             return function (command, success, error) {
@@ -57,15 +55,15 @@ module.exports = (function () {
                     command('playid ' + id, function (response) {
                         success(response.toJSON());
                     });
+                },
+
+                volume: function (volume) {
+                    volume = parseInt(volume, 10);
+                    volume = isNaN(volume) ? 0 : volume;
+                    volume = Math.max(0, Math.min(volume, 100));
+
+                    command('setvol ' + volume);
                 }
-            },
-
-            setVolume: function (volume) {
-                volume = parseInt(volume, 10);
-                volume = isNaN(volume) ? 0 : volume;
-                volume = Math.max(0, Math.min(volume, 100));
-
-                command('setvol ' + volume);
             },
 
             status: {

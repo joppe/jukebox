@@ -1,0 +1,45 @@
+!!!
+html
+    head
+        title='Jukebox'
+        link(rel='stylesheet', type='text/css', media='screen', href='/css/bootstrap.min.css')
+        link(rel='stylesheet', type='text/css', media='screen', href='/css/screen.css')
+        link(rel='stylesheet', type='text/css', media='screen', href='/css/debug.css')
+        script(type='text/javascript', src='/js/3rd-party/jquery-1.10.0.min.js')
+        script(type='text/javascript', src='/js/debug.js')
+
+    body
+        header
+            h1 Jukebox - debug
+        section
+            ul.controls
+                li
+                    a(href="/playback/play") play
+                li
+                    a(href="/playback/stop") stop
+                li
+                    a(href="/playback/next") next
+                li
+                    a(href="/playback/previous") previous
+                li
+                    a(href="/playback/pause") pause
+                li
+                    a(href="/playback/resume") resume
+                li
+                    a(href="/playback/volume/10") volume (10)
+                li
+                    a(href="/playback/volume/80") volume (80)
+                li
+                    a(href="/status/status") status
+                li
+                    a(href="/status/stats") stats
+                li
+                    a(href="/status/currentsong") currentsong
+                li
+                    a(href="/playlist/playlistinfo") playlistinfo
+                li
+                    a(href="/database/search/get") search "get"
+                li
+                    a(href="/database/ls/.") ls "."
+
+            textarea#response
