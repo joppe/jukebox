@@ -26,9 +26,9 @@ html
                 li
                     a(href="/playback/resume") resume
                 li
-                    a(href="/playback/volume/10") volume (10)
-                li
-                    a(href="/playback/volume/80") volume (80)
+                    form(action="/playback/volume", method="post")
+                        input(type="number", name="volume")
+                        button set volume
                 li
                     a(href="/status/status") status
                 li

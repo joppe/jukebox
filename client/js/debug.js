@@ -3,21 +3,47 @@
 jQuery(function ($) {
     'use strict';
 
-    var $response = $('#response'),
-        seperator = '\n**************************************\n';
+    var doRequest;
+
+    doRequest = (function () {
+        var $response = $('#response'),
+            seperator = '\n**************************************\n';
+
+        return function (url, req) {
+            var type = 'GET';
+
+            if (req) {
+                type = 'POST';
+            }
+
+            $.ajax({
+                url: url,
+                data: req,
+                type: type,
+                success: function (res) {
+                    $response.text(res + seperator + $response.text());
+                }
+            });
+        };
+    }());
 
     $('ul a').on({
         click: function (event) {
             event.preventDefault();
 
-            var $anchor = $(this);
+            doRequest($(this).prop('href'));
+        }
+    });
 
-            $.ajax({
-                url: $anchor.prop('href'),
-                success: function (data) {
-                    $response.text(data + seperator + $response.text());
-                }
-            });
+    $('ul form').on({
+        submit: function (event) {
+            event.preventDefault();
+
+            var $form = $(this);
+
+            doRequest($form.prop('action'), $form.serialize());
+
+            return false;
         }
     });
 });

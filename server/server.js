@@ -38,11 +38,15 @@ app.get('/playback/:control', function (req, res) {
     res.send(control);
 });
 
-app.get('/playback/volume/:volume', function (req, res) {
-    var volume = req.params.volume;
+app.post('/playback/volume', function (req, res) {
+    var volume = parseInt(req.body.volume, 10);
 
-    mpdc.playback.volume(volume);
-    res.send(volume);
+    if (isNaN(volume) === false) {
+        mpdc.playback.volume(volume);
+        res.send('volume set to: ' + volume);
+    } else {
+        res.send('volume must be an integer (' + volume + ')');
+    }
 });
 
 app.get('/status/:status', function (req, res) {
