@@ -30,6 +30,10 @@ html
                         input(type="number", name="volume")
                         button set volume
                 li
+                    form(action="/playback/playid", method="post")
+                        input(type="number", name="playid")
+                        button set playid
+                li
                     a(href="/status/status") status
                 li
                     a(href="/status/stats") stats

@@ -38,6 +38,16 @@ app.get('/playback/:control', function (req, res) {
     res.send(control);
 });
 
+app.post('/playback/playid', function (req, res) {
+    var playid = req.body.playid;
+
+    mpdc.playback.playid(playid, function (info) {
+        res.send('success ' + info);
+    }, function (info) {
+        res.send('error :' + info.getData().toString());
+    });
+});
+
 app.post('/playback/volume', function (req, res) {
     var volume = parseInt(req.body.volume, 10);
 

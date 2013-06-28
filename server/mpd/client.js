@@ -51,9 +51,11 @@ module.exports = (function () {
                     command('pause 0');
                 },
 
-                playid: function (id, success) {
+                playid: function (id, success, error) {
                     command('playid ' + id, function (response) {
                         success(response.toJSON());
+                    }, function (response) {
+                        error(response);
                     });
                 },
 
