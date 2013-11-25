@@ -1,58 +1,78 @@
-/*global require, module,  __dirname */
-/*jslint node: true */
+/*global require, module*/
 
 module.exports = (function () {
     'use strict';
 
+    var response = require('./response/response.js');
+
     function create(connection) {
         var client,
-            command;
+            transmitCommand,
+            prepareArgument;
 
-        command = (function () {
-            var response = require('./response/response.js'),
-                parsedData;
+        /**
+         * @param {string} command
+         * @param {Function} [success]
+         * @param {Function} [error]
+         */
+        transmitCommand = function (command, success, error) {
+            connection.command(command, function (data) {
+                var parsedData = response.create(data);
 
-            return function (command, success, error) {
-                connection.command(command, function (data) {
-                    parsedData = response.create(data);
+                if (!parsedData.hasError() && success) {
+                    success(parsedData);
+                } else if (parsedData.hasError() && error) {
+                    error(parsedData);
+                }
+            });
+        };
 
-                    if (!parsedData.hasError() && success) {
-                        success(parsedData);
-                    } else if (parsedData.hasError() && error) {
-                        error(parsedData);
-                    }
-                });
-            };
-        }());
+        prepareArgument = function (arg) {
+            return '"' + arg.replace('"', '\\"') + '"';
+        };
 
         client = {
+            /**
+             * Stop MPD from running
+             *
+             * @param {Function} [callback]
+             */
+            kill: function (callback) {
+                transmitCommand('kill', function () {
+                    callback('Successfully killed mpd service');
+                }, function (message) {
+                    callback(message);
+                });
+            },
+
+            /*
             playback: {
                 play: function () {
-                    command('play');
+                    transmitCommand('play');
                 },
 
                 stop: function () {
-                    command('stop');
+                    transmitCommand('stop');
                 },
 
                 next: function () {
-                    command('next');
+                    transmitCommand('next');
                 },
 
                 previous: function () {
-                    command('previous');
+                    transmitCommand('previous');
                 },
 
                 pause: function () {
-                    command('pause 1');
+                    transmitCommand('pause 1');
                 },
 
                 resume: function () {
-                    command('pause 0');
+                    transmitCommand('pause 0');
                 },
 
                 playid: function (id, success, error) {
-                    command('playid ' + id, function (response) {
+                    transmitCommand('playid ' + id, function (response) {
                         success(response.toJSON());
                     }, function (response) {
                         error(response);
@@ -64,25 +84,25 @@ module.exports = (function () {
                     volume = isNaN(volume) ? 0 : volume;
                     volume = Math.max(0, Math.min(volume, 100));
 
-                    command('setvol ' + volume);
+                    transmitCommand('setvol ' + volume);
                 }
             },
 
             status: {
                 status: function (success) {
-                    command('status', function (response) {
+                    transmitCommand('status', function (response) {
                         success(response.toJSON());
                     });
                 },
 
                 stats: function (success) {
-                    command('stats', function (response) {
+                    transmitCommand('stats', function (response) {
                         success(response.toJSON());
                     });
                 },
 
                 currentsong: function (success) {
-                    command('currentsong', function (response) {
+                    transmitCommand('currentsong', function (response) {
                         success(response.toJSON());
                     });
                 }
@@ -90,31 +110,31 @@ module.exports = (function () {
 
             playlist: {
                 playlistinfo: function (success) {
-                    command('playlistinfo', function (response) {
+                    transmitCommand('playlistinfo', function (response) {
                         success(response.toJSON());
                     });
                 },
 
                 addid: function (uri, success) {
-                    command('addid ' + uri, function (response) {
+                    transmitCommand('addid ' + uri, function (response) {
                         success(response.toJSON());
                     });
                 },
 
                 deleteid: function (id, success) {
-                    command('deleteid ' + id, function (response) {
+                    transmitCommand('deleteid ' + id, function (response) {
                         success(response.toJSON());
                     });
                 },
 
                 clear: function (success) {
-                    command('clear', function (response) {
+                    transmitCommand('clear', function (response) {
                         success(response.toJSON());
                     });
                 },
 
                 shuffle: function (success) {
-                    command('shuffle', function (response) {
+                    transmitCommand('shuffle', function (response) {
                         success(response.toJSON());
                     });
                 }
@@ -122,23 +142,19 @@ module.exports = (function () {
 
             database: {
                 search: function (query, success) {
-                    command('search any ' + query, function (response) {
+                    transmitCommand('search any ' + query, function (response) {
                         success(response.toJSON());
                     });
                 },
 
                 ls: function (query, success) {
-                    command('lsinfo', function (response) {
+                    transmitCommand('lsinfo', function (response) {
                         success(response.toJSON());
                     });
                 }
             },
 
-            kill: function () {
-                command('kill', function () {
-                    console.log('conncetion killed');
-                });
-            }
+            /**/
         };
 
         return client;

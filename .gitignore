@@ -1,6 +1,7 @@
-.idea/*
+.idea/
 node_modules/
 doc/.project
 .sass-cache/*
 client/css/screen.css
 client/css/debug.css
+bower_components/

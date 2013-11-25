@@ -1,6 +1,4 @@
-/*global require, module,  __dirname */
-/*jslint node: true */
-'use strict';
+/*global require, __dirname */
 
 var express = require('express'),
     socket = require('./tcp/socket.js'),
@@ -21,13 +19,25 @@ app.set('view engine', 'jade');
 app.engine('jade', require('jade').__express);
 
 app.get('/', function (req, res) {
+    'use strict';
+
     res.render('jukebox');
 });
 
 app.get('/debug', function (req, res) {
+    'use strict';
+
     res.render('debug');
 });
 
+app.get('/mpd/kill', function (req, res) {
+    'use strict';
+
+    mpdc.kill(function (message) {
+        res.send(message);
+    });
+});
+/*
 app.get('/playback/:control', function (req, res) {
     var control = req.params.control;
 
@@ -120,7 +130,7 @@ app.get('/database/ls/:query', function (req, res) {
         res.send(info);
     });
 });
-
+/**/
 app.listen(port);
 //console.log('Listening on port 3000');
 //console.log(__dirname + '/client');

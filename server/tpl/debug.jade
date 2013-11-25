@@ -2,10 +2,10 @@
 html
     head
         title='Jukebox'
-        link(rel='stylesheet', type='text/css', media='screen', href='/css/bootstrap.min.css')
+        link(rel='stylesheet', type='text/css', media='screen', href='/3rd-party/bootstrap-css/css/bootstrap.min.css')
         link(rel='stylesheet', type='text/css', media='screen', href='/css/screen.css')
         link(rel='stylesheet', type='text/css', media='screen', href='/css/debug.css')
-        script(type='text/javascript', src='/js/3rd-party/jquery-1.10.0.min.js')
+        script(type='text/javascript', src='/3rd-party/jquery/jquery.min.js')
         script(type='text/javascript', src='/js/debug.js')
 
     body
@@ -13,6 +13,8 @@ html
             h1 Jukebox - debug
         section
             ul.controls
+                li
+                    a(href="/mpd/kill") kill
                 li
                     a(href="/playback/play") play
                 li
