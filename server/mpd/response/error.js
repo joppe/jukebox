@@ -8,7 +8,10 @@ module.exports = (function () {
      * @returns {object}
      */
     function create(response) {
-        return response.getProperties();
+        return {
+            error: true,
+            message: response.getData()
+        };
     }
 
     return {

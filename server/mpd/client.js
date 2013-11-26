@@ -3,7 +3,11 @@
 module.exports = (function () {
     'use strict';
 
-    var response = require('./response/response.js');
+    var response = require('./response/response.js'),
+        errorResponse = require('./response/error.js'),
+        statsResponse = require('./response/status.js'),
+        songResponse = require('./response/song.js'),
+        statusResponse = require('./response/status.js');
 
     function create(connection) {
         var client,
@@ -40,36 +44,77 @@ module.exports = (function () {
             kill: function (callback) {
                 transmitCommand('kill', function () {
                     callback('Successfully killed mpd service');
-                }, function (message) {
-                    callback(message);
+                }, function (response) {
+                    callback(errorResponse.create(response));
                 });
             },
 
+            /**
+             * @param {Function} callback
+             */
+            status: function (callback) {
+                transmitCommand('status', function (response) {
+                    callback(statusResponse.create(response));
+                }, function (response) {
+                    callback(errorResponse.create(response));
+                });
+            },
+
+            /**
+             * @param {Function} callback
+             */
+            stats: function (callback) {
+                transmitCommand('stats', function (response) {
+                    callback(statsResponse.create(response));
+                }, function (response) {
+                    callback(errorResponse.create(response));
+                });
+            },
+
+            /**
+             * @param {Function} callback
+             */
+            currentsong: function (callback) {
+                transmitCommand('currentsong', function (response) {
+                    callback(songResponse.create(response));
+                }, function (response) {
+                    callback(errorResponse.create(response));
+                });
+            },
+
+            play: function () {
+                transmitCommand('play');
+            },
+
+            stop: function () {
+                transmitCommand('stop');
+            },
+
+            next: function () {
+                transmitCommand('next');
+            },
+
+            previous: function () {
+                transmitCommand('previous');
+            },
+
+            pause: function () {
+                transmitCommand('pause 1');
+            },
+
+            resume: function () {
+                transmitCommand('pause 0');
+            },
+
+            /**
+             * @param {number} volume
+             */
+            volume: function (volume) {
+                transmitCommand('setvol ' + volume);
+            }
+
             /*
             playback: {
-                play: function () {
-                    transmitCommand('play');
-                },
-
-                stop: function () {
-                    transmitCommand('stop');
-                },
-
-                next: function () {
-                    transmitCommand('next');
-                },
-
-                previous: function () {
-                    transmitCommand('previous');
-                },
-
-                pause: function () {
-                    transmitCommand('pause 1');
-                },
-
-                resume: function () {
-                    transmitCommand('pause 0');
-                },
 
                 playid: function (id, success, error) {
                     transmitCommand('playid ' + id, function (response) {
@@ -78,34 +123,6 @@ module.exports = (function () {
                         error(response);
                     });
                 },
-
-                volume: function (volume) {
-                    volume = parseInt(volume, 10);
-                    volume = isNaN(volume) ? 0 : volume;
-                    volume = Math.max(0, Math.min(volume, 100));
-
-                    transmitCommand('setvol ' + volume);
-                }
-            },
-
-            status: {
-                status: function (success) {
-                    transmitCommand('status', function (response) {
-                        success(response.toJSON());
-                    });
-                },
-
-                stats: function (success) {
-                    transmitCommand('stats', function (response) {
-                        success(response.toJSON());
-                    });
-                },
-
-                currentsong: function (success) {
-                    transmitCommand('currentsong', function (response) {
-                        success(response.toJSON());
-                    });
-                }
             },
 
             playlist: {

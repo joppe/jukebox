@@ -37,17 +37,77 @@ app.get('/mpd/kill', function (req, res) {
         res.send(message);
     });
 });
-/*
-app.get('/playback/:control', function (req, res) {
-    var control = req.params.control;
+app.get('/mpd/status', function (req, res) {
+    'use strict';
 
-    if (typeof mpdc.playback[control] === 'function') {
-        mpdc.playback[control]();
+    mpdc.status(function (response) {
+        res.send(response);
+    });
+});
+app.get('/mpd/stats', function (req, res) {
+    'use strict';
+
+    mpdc.stats(function (response) {
+        res.send(response);
+    });
+});
+app.get('/mpd/currentsong', function (req, res) {
+    'use strict';
+
+    mpdc.currentsong(function (response) {
+        res.send(response);
+    });
+});
+app.get('/mpd/play', function (req, res) {
+    'use strict';
+
+    mpdc.play();
+    res.send('play');
+});
+app.get('/mpd/stop', function (req, res) {
+    'use strict';
+
+    mpdc.stop();
+    res.send('stop');
+});
+app.get('/mpd/next', function (req, res) {
+    'use strict';
+
+    mpdc.next();
+    res.send('next');
+});
+app.get('/mpd/previous', function (req, res) {
+    'use strict';
+
+    mpdc.previous();
+    res.send('previous');
+});
+app.get('/mpd/pause', function (req, res) {
+    'use strict';
+
+    mpdc.pause();
+    res.send('pause');
+});
+app.get('/mpd/resume', function (req, res) {
+    'use strict';
+
+    mpdc.resume();
+    res.send('resume');
+});
+app.post('/mpd/volume', function (req, res) {
+    'use strict';
+
+    var volume = parseInt(req.body.volume, 10);
+
+    if (false === isNaN(volume)) {
+        mpdc.volume(volume);
+        res.send('volume set to: ' + volume);
+    } else {
+        res.send('volume must be an integer (' + volume + ')');
     }
-
-    res.send(control);
 });
 
+/*
 app.post('/playback/playid', function (req, res) {
     var playid = req.body.playid;
 
@@ -58,16 +118,6 @@ app.post('/playback/playid', function (req, res) {
     });
 });
 
-app.post('/playback/volume', function (req, res) {
-    var volume = parseInt(req.body.volume, 10);
-
-    if (isNaN(volume) === false) {
-        mpdc.playback.volume(volume);
-        res.send('volume set to: ' + volume);
-    } else {
-        res.send('volume must be an integer (' + volume + ')');
-    }
-});
 
 app.get('/status/:status', function (req, res) {
     var status = req.params.status;

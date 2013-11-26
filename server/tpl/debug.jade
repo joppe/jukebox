@@ -16,36 +16,26 @@ html
                 li
                     a(href="/mpd/kill") kill
                 li
-                    a(href="/playback/play") play
+                    a(href="/mpd/status") status
                 li
-                    a(href="/playback/stop") stop
+                    a(href="/mpd/stats") stats
                 li
-                    a(href="/playback/next") next
+                    a(href="/mpd/currentsong") currentsong
                 li
-                    a(href="/playback/previous") previous
+                    a(href="/mpd/play") play
                 li
-                    a(href="/playback/pause") pause
+                    a(href="/mpd/stop") stop
                 li
-                    a(href="/playback/resume") resume
+                    a(href="/mpd/next") next
                 li
-                    form(action="/playback/volume", method="post")
+                    a(href="/mpd/previous") previous
+                li
+                    a(href="/mpd/pause") pause
+                li
+                    a(href="/mpd/resume") resume
+                li
+                    form(action="/mpd/volume", method="post")
                         input(type="number", name="volume")
                         button set volume
-                li
-                    form(action="/playback/playid", method="post")
-                        input(type="number", name="playid")
-                        button set playid
-                li
-                    a(href="/status/status") status
-                li
-                    a(href="/status/stats") stats
-                li
-                    a(href="/status/currentsong") currentsong
-                li
-                    a(href="/playlist/playlistinfo") playlistinfo
-                li
-                    a(href="/database/search/get") search "get"
-                li
-                    a(href="/database/ls/.") ls "."
 
             textarea#response
