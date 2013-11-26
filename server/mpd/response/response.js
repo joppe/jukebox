@@ -7,8 +7,8 @@
 module.exports = (function () {
     'use strict';
 
-    var COMPLETION_CODE_OK = /^OK$/,
-        COMPLETION_CODE_ERROR = /^ACK/;
+    var COMPLETION_CODE_OK = /^OK$/m,
+        COMPLETION_CODE_ERROR = /^ACK/m;
 
     /**
      * @param {string} line
@@ -36,10 +36,10 @@ module.exports = (function () {
     function create(rawData) {
         var lines = [],
             error = false,
-            data = rawData.toString();
+            data = rawData.toString().replace(/\n$/m, '');
 
         if (COMPLETION_CODE_OK.test(data)) {
-            lines = data.toString().replace(/\n$/, '').split('\n');
+            lines = data.split('\n');
 
             // remove the last line (is only an OK message)
             lines.pop();
