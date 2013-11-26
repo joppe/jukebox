@@ -52,7 +52,7 @@ module.exports = (function () {
 
                     inprogress = false;
 
-                    if (queue.length) {
+                    if (queue.length > 0) {
                         command = queue.shift();
                         callback = command.callback;
                     }
