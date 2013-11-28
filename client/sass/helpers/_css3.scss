@@ -1,0 +1,139 @@
+@mixin add-vendor-prefixes($property, $value) {
+    $vendor-prefixes: ('-webkit-' '-moz-' '-o-' '-ms-' '');
+
+    @each $vendor-prefix in $vendor-prefixes {
+        #{$vendor-prefix}#{$property}: $value;
+    }
+}
+
+/**
+ * @param number $radius
+ */
+@mixin border-radius($radius...) {
+    $length: length($radius);
+    $top-left-radius: 0;
+    $top-right-radius: 0;
+    $bottom-right-radius: 0;
+    $bottom-left-radius: 0;
+
+    @if $length == 1 {
+        $top-left-radius: nth($radius, 1);
+        $top-right-radius: nth($radius, 1);
+        $bottom-right-radius: nth($radius, 1);
+        $bottom-left-radius: nth($radius, 1);
+    } @else if $length == 2 {
+        $top-left-radius: nth($radius, 1);
+        $top-right-radius: nth($radius, 1);
+        $bottom-right-radius: nth($radius, 2);
+        $bottom-left-radius: nth($radius, 2);
+    } @else if $length == 3 {
+        $top-left-radius: nth($radius, 1);
+        $top-right-radius: nth($radius, 2);
+        $bottom-right-radius: nth($radius, 3);
+        $bottom-left-radius: nth($radius, 2);
+    } @else if $length > 3 {
+        $top-left-radius: nth($radius, 1);
+        $top-right-radius: nth($radius, 2);
+        $bottom-right-radius: nth($radius, 3);
+        $bottom-left-radius: nth($radius, 4);
+    }
+    @include add-vendor-prefixes(border-radius, #{$top-left-radius}px #{$top-right-radius}px #{$bottom-right-radius}px #{$bottom-left-radius}px);
+}
+
+/**
+ * @param number $opacity [0.0-1.0]
+ */
+@mixin opacity($opacity) {
+    @include add-vendor-prefixes(opacity, $opacity);
+}
+
+/**
+ * @param string $value
+ *
+ * none:        The text of the element and sub-elements will appear as if they cannot be selected.
+ *              Any use of Selection however will contain these elements.
+ * text:        The text can be selected by the user.
+ * -moz-none:   The text of the element and sub-elements cannot be selected,
+ *              but selection can be enabled on sub-elements using -moz-user-select:text
+ * all:         In an HTML editor, if a double-click or context-click occurred in sub-elements,
+ *              the highest ancestor with this value will be selected.
+ * element:     Supported in Firefox and Internet Explorer. Enables selection to start within
+ *              the element; however, the selection will be contained by the bounds of that element.
+ */
+@mixin user-select($value: none) {
+    @include add-vendor-prefixes(user-select, $value);
+}
+
+/**
+ * @param string $name
+ * @param number $duration [ease linear ease-in ease-out ease-in-out]
+ * @param number|string $iteration-count
+ */
+@mixin animation($name, $duration, $iteration-count: 1) {
+    @include add-vendor-prefixes(animation-name, $name);
+    @include add-vendor-prefixes(animation-duration, #{$duration}s);
+    @include add-vendor-prefixes(animation-iteration-count, $iteration-count);
+}
+
+/**
+ * @param string $property
+ * @param number $duration [ease linear ease-in ease-out ease-in-out]
+ * @param string $timing-function
+ * @param number $delay default:0
+ */
+@mixin transition($property, $duration, $timing-function, $delay:0) {
+    @include add-vendor-prefixes(transition-property, $property);
+    @include add-vendor-prefixes(transition-duration, #{$duration}s);
+    @include add-vendor-prefixes(transition-timinig-function, $timing-function);
+
+    @if $delay > 0 {
+        @include add-vendor-prefixes(transition-delay, #{$delay}s);
+    }
+}
+
+/**
+ * @param number $horizontal
+ * @param number $vertical
+ * @param number $blur
+ * @param number $spread
+ * @param string $color
+ * @param string $inset default:''
+ */
+@mixin box-shadow($horizontal, $vertical, $blur, $spread, $color, $inset: '') {
+    @if $inset == 'inset' {
+        @include add-vendor-prefixes(box-shadow, $inset #{$horizontal}px #{$vertical}px #{$blur}px #{$spread}px $color);
+    } @else {
+        @include add-vendor-prefixes(box-shadow, #{$horizontal}px #{$vertical}px #{$blur}px #{$spread}px $color);
+    }
+}
+
+/**
+ * @param number $horizontal
+ * @param number $vertical
+ * @param number $blur
+ * @param string $color
+ */
+@mixin text-shadow($horizontal, $vertical, $blur, $color) {
+    @include add-vendor-prefixes(text-shadow, #{$horizontal}px #{$vertical}px #{$blur}px $color);
+}
+
+/**
+ * @param number $degree [0-360]
+ */
+@mixin rotate($degree) {
+    @include add-vendor-prefixes(user-select, rotate(#{$degree}deg));
+}
+
+/**
+ * @param color $start-color
+ * @param color $end-color
+ */
+@mixin linear-gradient($start-color, $end-color) {
+    background: #{$start-color}; /* Old browsers */
+    background: -moz-linear-gradient(top, #{$start-color} 0%, #{$end-color} 100%); /* FF3.6+ */
+    background: -webkit-linear-gradient(top, #{$start-color} 0%,#{$end-color} 100%); /* Chrome10+,Safari5.1+ */
+    background: -o-linear-gradient(top, #{$start-color} 0%,#{$end-color} 100%); /* Opera 11.10+ */
+    background: -ms-linear-gradient(top, #{$start-color} 0%,#{$end-color} 100%); /* IE10+ */
+    background: linear-gradient(to bottom, #{$start-color} 0%,#{$end-color} 100%); /* W3C */
+    filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#{$start-color}', endColorstr='#{$end-color}',GradientType=0 ); /* IE6-9 */
+}

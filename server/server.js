@@ -1,11 +1,26 @@
 /*global require, __dirname */
 
 var express = require('express'),
+    exec = require('child_process').exec,
     socket = require('./tcp/socket.js'),
-    connection = socket.connect(6600, 'localhost'),
-    mpdc = require('./mpd/client.js').create(connection),
+    connection,
+    mpdc,
     app = express(),
     port = 3000;
+
+connection = socket.connect(6600, 'localhost', function () {
+    'use strict';
+
+    console.log('onerror');
+    exec('mpd', function (error) {
+        console.log('mpd started?');
+        if (error !== null) {
+            connection = socket.connect(6600, 'localhost');
+        }
+    });
+});
+
+mpdc = require('./mpd/client.js').create(connection);
 
 // express configuration
 app.use(express.bodyParser());
@@ -150,6 +165,7 @@ app.get('/mpd/shuffle', function (req, res) {
     'use strict';
 
     mpdc.shuffle();
+    res.send('shuffled');
 });
 app.post('/mpd/search', function (req, res) {
     'use strict';
@@ -173,3 +189,5 @@ app.post('/mpd/lsinfo', function (req, res) {
 app.listen(port);
 //console.log('Listening on port 3000');
 //console.log(__dirname + '/client');
+
+ /**/

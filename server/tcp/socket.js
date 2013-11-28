@@ -14,27 +14,24 @@ module.exports = (function () {
     /**
      * Create a tcp socket connection
      *
+     * @param {number} port
+     * @param {string} host
+     * @param {Function} onerror
      * @returns {{connect: Function, command: Function, processQueue: Function}}
      */
-    function create() {
+    function create(port, host, onerror) {
         var socket,
             connected = false,
             inprogress = false,
             queue = [],
             client,
-            parameters = null;
+            parameters = {
+                port: port,
+                host: host
+            };
 
         socket = {
-            /**
-             * @param {number} port
-             * @param {string} host
-             */
-            connect: function (port, host) {
-                parameters = {
-                    port: port,
-                    host: host
-                };
-
+            connect: function () {
                 client = net.connect(parameters);
 
                 client.on('connect', function () {
@@ -44,6 +41,10 @@ module.exports = (function () {
 
                 client.on('end', function () {
                     connected = false;
+                });
+
+                client.on('error', function (error) {
+                    onerror(error);
                 });
 
                 client.on('data', function (data) {
@@ -81,7 +82,7 @@ module.exports = (function () {
                     client.write(queue[0].command + '\n');
                 } else if (connected === false) {
                     console.log('Reconnect, conncetion was dropped');
-                    socket.connect(parameters.port, parameters.host);
+                    socket.connect();
                 }
             }
         };
@@ -93,12 +94,13 @@ module.exports = (function () {
         /**
          * @param {number} port
          * @param {string} host
+         * @param {Function} onerror
          * @returns {{command: Function}}
          */
-        connect: function (port, host) {
-            var socket = create();
+        connect: function (port, host, onerror) {
+            var socket = create(port, host, onerror);
 
-            socket.connect(port, host);
+            socket.connect();
 
             return {
                 /**
