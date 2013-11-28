@@ -21,6 +21,7 @@ jQuery(function ($) {
                 data: req,
                 type: type,
                 success: function (res) {
+                    console.log(res);
                     $response.text(res + seperator + $response.text());
                 }
             });

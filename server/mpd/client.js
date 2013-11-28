@@ -7,6 +7,7 @@ module.exports = (function () {
         errorResponse = require('./response/error.js'),
         statsResponse = require('./response/status.js'),
         songResponse = require('./response/song.js'),
+        songsResponse = require('./response/songs.js'),
         statusResponse = require('./response/status.js');
 
     function create(connection) {
@@ -111,67 +112,92 @@ module.exports = (function () {
              */
             volume: function (volume) {
                 transmitCommand('setvol ' + volume);
+            },
+
+            /**
+             * @param {string} id
+             * @param {Function} callback
+             */
+            playid: function (id, callback) {
+                transmitCommand('playid ' + id, function (response) {
+                    callback(response.getProperties());
+                }, function (response) {
+                    callback(errorResponse.create(response));
+                });
+            },
+
+            /**
+             * @param {Function} callback
+             */
+            playlistinfo: function (callback) {
+                transmitCommand('playlistinfo', function (response) {
+                    callback(songsResponse.create(response));
+                }, function (response) {
+                    callback(errorResponse.create(response));
+                });
+            },
+
+            /**
+             * @param {string} uri
+             * @param {Function} callback
+             */
+            addid: function (uri, callback) {
+                transmitCommand('addid ' + prepareArgument(uri), function (response) {
+                    callback(response.getProperties());
+                }, function (response) {
+                    callback(errorResponse.create(response));
+                });
+            },
+
+            /**
+             * @param {string} id
+             * @param {Function} callback
+             */
+            deleteid: function (id, callback) {
+                transmitCommand('deleteid ' + id, function (response) {
+                    callback(response.getProperties());
+                }, function (response) {
+                    callback(errorResponse.create(response));
+                });
+            },
+
+            clear: function () {
+                transmitCommand('clear');
+            },
+
+            shuffle: function () {
+                transmitCommand('shuffle');
+            },
+
+            /**
+             * @param {string} query
+             * @param {Function} callback
+             */
+            search: function (query, callback) {
+                transmitCommand('search any ' + prepareArgument(query), function (response) {
+                    callback(songsResponse.create(response));
+                }, function (response) {
+                    callback(errorResponse.create(response));
+                });
+            },
+
+            /**
+             * @param {string} uri
+             * @param {Function} callback
+             */
+            lsinfo: function (uri, callback) {
+                var command = 'lsinfo';
+
+                if (uri) {
+                    command += ' ' + prepareArgument(uri);
+                }
+
+                transmitCommand(command, function (response) {
+                    callback(songsResponse.create(response));
+                }, function (response) {
+                    callback(errorResponse.create(response));
+                });
             }
-
-            /*
-            playback: {
-
-                playid: function (id, success, error) {
-                    transmitCommand('playid ' + id, function (response) {
-                        success(response.toJSON());
-                    }, function (response) {
-                        error(response);
-                    });
-                },
-            },
-
-            playlist: {
-                playlistinfo: function (success) {
-                    transmitCommand('playlistinfo', function (response) {
-                        success(response.toJSON());
-                    });
-                },
-
-                addid: function (uri, success) {
-                    transmitCommand('addid ' + uri, function (response) {
-                        success(response.toJSON());
-                    });
-                },
-
-                deleteid: function (id, success) {
-                    transmitCommand('deleteid ' + id, function (response) {
-                        success(response.toJSON());
-                    });
-                },
-
-                clear: function (success) {
-                    transmitCommand('clear', function (response) {
-                        success(response.toJSON());
-                    });
-                },
-
-                shuffle: function (success) {
-                    transmitCommand('shuffle', function (response) {
-                        success(response.toJSON());
-                    });
-                }
-            },
-
-            database: {
-                search: function (query, success) {
-                    transmitCommand('search any ' + query, function (response) {
-                        success(response.toJSON());
-                    });
-                },
-
-                ls: function (query, success) {
-                    transmitCommand('lsinfo', function (response) {
-                        success(response.toJSON());
-                    });
-                }
-            },
-
-            /**/
         };
 
         return client;

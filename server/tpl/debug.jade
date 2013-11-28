@@ -37,5 +37,29 @@ html
                     form(action="/mpd/volume", method="post")
                         input(type="number", name="volume")
                         button set volume
+                li
+                    form(action="/mpd/playid", method="post")
+                        input(type="number", name="playid")
+                        button set playid
+                li
+                    a(href="/mpd/playlistinfo") playlistinfo
+                li
+                    form(action="/mpd/addid", method="post")
+                        input(type="string", name="uri")
+                        button addid
+                li
+                    form(action="/mpd/deleteid", method="post")
+                        input(type="number", name="id")
+                        button deleteid
+                li
+                    a(href="/mpd/shuffle") shuffle
+                li
+                    form(action="/mpd/search", method="post")
+                        input(type="text", name="query")
+                        button search
+                li
+                    form(action="/mpd/lsinfo", method="post")
+                        input(type="text", name="uri")
+                        button lsinfo
 
             textarea#response
