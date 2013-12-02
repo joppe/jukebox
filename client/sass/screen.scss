@@ -1,0 +1,196 @@
+@import 'helpers/css3';
+@import 'helpers/mixins';
+
+$base-color: #222222;
+$devider-color: #121212;
+$devider-shade-color: #2a2a2a;
+$element-color: #353535;
+$inset-color: #414141;
+
+@mixin specialfont() {
+    font-family: 'Signika Negative', sans-serif;
+}
+
+@mixin fontlight() {
+    @include specialfont();
+
+    font-weight: 300;
+}
+@mixin fontnormal() {
+    @include specialfont();
+
+    font-weight: 400;
+}
+@mixin fontsemibold() {
+    @include specialfont();
+
+    font-weight: 600;
+}
+@mixin fontbold() {
+    @include specialfont();
+
+    font-weight: 700;
+}
+
+*,
+*:before,
+*:after {
+    @include add-vendor-prefixes(box-sizing, border-box);
+}
+
+body {
+    @include reset-spacing();
+    @include fontnormal();
+
+    background: #aaaaaa;
+    color: #222222;
+    font: {
+        size: 14px;
+    }
+    line-height: 20px;
+}
+
+a.bttn {
+    @include border-radius(25px);
+    @include box-shadow(0, 0, 0, 2, $devider-color);
+    @include text-shadow(1, 1, 2, darken(#ffffff, 20%));
+
+    display: inline-block;
+    padding: 10px 0 0 0;
+    width: 50px;
+    height: 50px;
+    background: $base-color;
+    border: 1px solid $devider-shade-color;
+    color: #ffffff;
+    font-size: 20px;
+    text: {
+        decoration: none;
+        align: center;
+    }
+    cursor: pointer;
+
+    &:hover {
+        color: darken(#ffffff, 30%);
+    }
+}
+
+div.progress {
+    @include border-radius(3px);
+
+    width: 100%;
+    height: auto;
+    margin: 0;
+    padding: 2px;
+    background-color: $devider-color;
+    border: 1px solid $devider-shade-color;
+
+    div.bar {
+        @include border-radius(3px);
+        @include box-shadow(0, 0, 1, 2, lighten(#0D58A6, 10%), inset);
+
+        height: 10px;
+        background-color: #0D58A6;
+    }
+}
+
+div.player {
+    @include border-radius(5px);
+
+    position: relative;
+    margin: 10px;
+    padding: 30px;
+    background: $base-color;
+
+    div.info {
+        padding: 20px 0;
+
+        div.artist {
+            @include fontsemibold();
+
+            font-size: 20px;
+            line-height: 24px;
+            text-align: center;
+            color: #ffffff;
+        }
+        div.song {
+            @include fontbold();
+
+            text-align: center;
+            color: #ffffff;
+        }
+    }
+
+    div.status {
+        margin-bottom: 20px;
+
+        div.time {
+            span.played {
+
+            }
+            span.total {
+
+            }
+        }
+    }
+
+    div.playback {
+        position: relative;
+        text-align: center;
+
+        div.previous-next {
+            position: absolute;
+            width: 100%;
+            text-align: center;
+
+            a.bttn {
+                margin-top: 25px;
+            }
+            a.glyphicon-step-backward {
+                @include border-radius(25px, 0, 0, 25px);
+
+                margin-right: 40px;
+                border-right: none;
+            }
+
+            a.glyphicon-step-forward {
+                @include border-radius(0, 25px, 25px, 0);
+
+                margin-left: 40px;
+                border-left: none;
+            }
+        }
+
+        a.glyphicon-play {
+            @include border-radius(50px);
+
+            position: relative;
+            z-index: 2;
+            padding-top: 20px;
+            width: 100px;
+            height: 100px;
+            font-size: 40px;
+        }
+    }
+
+    div.volume {
+        position: absolute;
+        right: 20px;
+        bottom: 30px;
+
+        a.bttn {
+            @include border-radius(15px);
+
+            margin: 20px 10px 0 10px;
+            padding-top: 5px;
+            width: 30px;
+            height: 30px;
+            font-size: 16px;
+        }
+
+        span.volume {
+            padding: 0 10px;
+            text-align: center;
+            color: #ffffff;
+        }
+    }
+}

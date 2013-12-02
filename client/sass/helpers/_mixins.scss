@@ -1,5 +1,4 @@
 @import 'css3';
-@import '../vars';
 
 /**
  * reset the spacing of an element
@@ -20,8 +19,11 @@
 
 /**
  * reset the font size
+ * @param number $line-height
  */
 @mixin reset-font-size($line-height) {
+    $base-font-size-px: 16 !default;
+
     font-size: percentage($base-font-size-px/16);
     line-height: $line-height;
 }
@@ -29,10 +31,12 @@
 /**
  * calculate the font size and line height in em's
  *
- * @param number $font_size
- * @param number $line_height, default -1
+ * @param number $font-size
+ * @param number $line-height, default -1
  */
 @mixin font-px-to-em($font-size, $line-height: -1) {
+    $base-font-size-px: 16 !default;
+
     $font-size-em: $font-size/$base-font-size-px;
 
     font-size: #{$font-size-em}em;
@@ -87,10 +91,20 @@
     }
 }
 
+/**
+ * @param string $what
+ * @param number $duration
+ */
 @mixin simple-transition($what:all, $duration:200) {
     @include add-vendor-prefixes(transition, #{$what} #{$duration}ms ease-in-out);
 }
 
+/**
+ * @param number $columns
+ * @param number $padding
+ * @param number $start
+ * @param number $end
+ */
 @mixin grid($columns: 12, $padding: 10px, $start: 1, $end: -1) {
     $width: 100%;
 
@@ -116,16 +130,4 @@
             width: $i * $width/$columns;
         }
     }
-}
-
-@mixin font-weight-bold() {
-    font-weight: 700;
-}
-
-@mixin font-weight-normal() {
-    font-weight: 500;
-}
-
-@mixin font-weight-light() {
-    font-weight: 300;
 }

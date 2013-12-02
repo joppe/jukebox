@@ -2,30 +2,34 @@
 html
     head
         title='Jukebox'
-        link(rel='stylesheet', type='text/css', media='screen', href='/css/bootstrap.min.css')
-        script(type='text/javascript', src='/js/3rd-party/jquery-1.10.0.min.js')
-        script(type='text/javascript', src='/js/backbone/template.js')
-        script(type='text/javascript', src='/js/backbone/view.js')
-        script(type='text/javascript', src='/js/mpd/mpd.js')
+        link(rel='stylesheet', type='text/css', media='screen', href='http://fonts.googleapis.com/css?family=Signika+Negative:300,400,600,700')
+        link(rel='stylesheet', type='text/css', media='screen', href='/3rd-party/bootstrap-css/css/bootstrap.min.css')
+        link(rel='stylesheet', type='text/css', media='screen', href='/css/screen.css')
+        script(type='text/javascript', src='/3rd-party/jquery/jquery.min.js')
+        script(type='text/javascript', src='/3rd-party/json2/json2.js')
+        script(type='text/javascript', src='/3rd-party/underscore/underscore-min.js')
+        script(type='text/javascript', src='/3rd-party/backbone/backbone-min.js')
         script(type='text/javascript', src='/js/global.js')
 
     body
-        header
-            h1 Jukebox
-        section
-            div#playback
-                a.btn(href="/playback/previous")
-                    i.icon-step-backward
-                a.btn(href="/playback/play")
-                    i.icon-play
-                a.btn(href="/playback/pause")
-                    i.icon-pause
-                a.btn(href="/playback/stop")
-                    i.icon-stop
-                a.btn(href="/playback/next")
-                    i.icon-step-forward
-                a.btn(href="/status/status")
-                    i.icon-heart
-                a.btn(href="/playlistinfo/playlistinfo")
-                    i.icon-th-list
-        footer
+        div.player
+            div.info
+                div.artist Lorem ipsum dolor sit amet - Proin sollicitudin
+                div.song Morbi lobortis sagittis justo non vehicula
+            div.status
+                div.progress
+                    div.bar(style='width: 40%;')
+                div.time
+                    span.played
+                    span.total
+            div.playback
+                div.previous-next
+                    a.bttn.glyphicon.glyphicon-step-backward
+                    a.bttn.glyphicon.glyphicon-step-forward
+                a.bttn.glyphicon.glyphicon-play
+            div.volume
+                a.bttn.glyphicon.glyphicon-volume-down
+                span.volume 90%
+                a.bttn.glyphicon.glyphicon-volume-up
+
+

@@ -37,7 +37,7 @@
         $bottom-right-radius: nth($radius, 3);
         $bottom-left-radius: nth($radius, 4);
     }
-    @include add-vendor-prefixes(border-radius, #{$top-left-radius}px #{$top-right-radius}px #{$bottom-right-radius}px #{$bottom-left-radius}px);
+    @include add-vendor-prefixes(border-radius, $top-left-radius $top-right-radius $bottom-right-radius $bottom-left-radius);
 }
 
 /**
