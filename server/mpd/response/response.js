@@ -34,19 +34,12 @@ module.exports = (function () {
      * @returns {{hasError: Function, getError: Function, getLines: Function, getProperty: Function, getProperties: Function, getData: Function, toJSON: Function}}
      */
     function create(rawData) {
-        var lines = [],
-            error = false,
-            data = rawData.toString().replace(/\n$/m, '');
+        var data = rawData.toString().replace(/^\s+|\s+$/g, ''),
+            lines = data.split('\n'),
+            error = false;
 
-        if (COMPLETION_CODE_OK.test(data)) {
-            lines = data.split('\n');
-
-            // remove the last line (is only an OK message)
-            lines.pop();
-        } else if (COMPLETION_CODE_ERROR.test(data)) {
+        if (COMPLETION_CODE_ERROR.test(lines[lines.length - 1])) {
             error = data;
-        } else {
-            error = 'No data received';
         }
 
         return {
