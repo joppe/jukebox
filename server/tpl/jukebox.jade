@@ -9,6 +9,9 @@ html
         script(type='text/javascript', src='/3rd-party/json2/json2.js')
         script(type='text/javascript', src='/3rd-party/underscore/underscore-min.js')
         script(type='text/javascript', src='/3rd-party/backbone/backbone-min.js')
+        script(type='text/javascript', src='/js/player/model.js')
+        script(type='text/javascript', src='/js/player/view.js')
+        script(type='text/javascript', src='/js/player/player.js')
         script(type='text/javascript', src='/js/global.js')
 
     body
@@ -28,8 +31,8 @@ html
                     a.bttn.glyphicon.glyphicon-step-forward
                 a.bttn.glyphicon.glyphicon-play
             div.volume
-                a.bttn.glyphicon.glyphicon-volume-down
-                span.volume 90%
-                a.bttn.glyphicon.glyphicon-volume-up
+                a.bttn.glyphicon.glyphicon-volume-down(href='/mpd/volume')
+                span.volume
+                a.bttn.glyphicon.glyphicon-volume-up(href='/mpd/volume')
 
 
