@@ -40,6 +40,8 @@ module.exports = (function () {
 
         if (COMPLETION_CODE_ERROR.test(lines[lines.length - 1])) {
             error = data;
+        } else if (COMPLETION_CODE_OK.test(lines[lines.length - 1])) {
+            lines.pop();
         }
 
         return {
