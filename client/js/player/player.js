@@ -8,6 +8,8 @@
     }
 
     win.Player.Player = function ($container) {
+        var self = this;
+
         this.$container = $container;
 
         this.playlist = new Player.Model.Playlist();
@@ -16,6 +18,10 @@
 
         this.createViews();
         this.update();
+
+        window.setTimeout(function () {
+            self.update();
+        }, 3000);
     };
     Player.Player.prototype = {
         createViews: function () {
