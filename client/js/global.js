@@ -1,7 +1,7 @@
-/*global jQuery*/
+/*global jQuery, Player*/
 
 jQuery(function ($) {
     'use strict';
 
-    window.console.log('foo');
+    new Player.Player($('div.player'));
 });
