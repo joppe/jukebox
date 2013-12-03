@@ -27,7 +27,7 @@
         },
 
         volume: function (amount) {
-            var volume = parseInt(this.model.get('voume'), 10);
+            var volume = parseInt(this.model.get('volume'), 10);
 
             if (isNaN(volume)) {
                 volume = 0;
