@@ -46,6 +46,50 @@
             return attributes;
         }
     });
-    Model.Status = Model.AbstractBase.extend({});
+    Model.Status = Model.AbstractBase.extend({
+        model: {
+            playlist: 'variant',
+            playlistlength: 'variant',
+            random: 'variant',
+            repeat: 'variant',
+            single: 'variant',
+            song: 'variant',
+            songid: 'variant',
+            state: 'variant',
+            volume: 'variant',
+            xfade: 'variant'
+        },
+
+        url: '/mpd/status'
+    });
+    Model.Song = Model.AbstractBase.extend({
+        model: {
+            Album: 'variant',
+            Artist: 'variant',
+            Date: 'variant',
+            Genre: 'variant',
+            Id: 'variant',
+            'Last-Modified': 'variant',
+            Pos: 'variant',
+            Time: 'variant',
+            Title: 'variant',
+            Track: 'variant',
+            file: 'variant'
+        }
+    });
+    Model.Currentsong = Model.Song.extend({
+        url: 'mpd/currentsong'
+    });
+    Model.Playlist = Backbone.Collection.extend({
+        url: 'mpd/playlistinfo',
+
+        model: Model.Song,
+
+        parse: function (response) {
+            response = response.songs || {};
+
+            return response;
+        }
+    });
 
 }(window));
