@@ -124,6 +124,8 @@ div.player {
         margin-bottom: 20px;
 
         div.time {
+            color: #ffffff;
+
             span.played {
 
             }
@@ -160,7 +162,8 @@ div.player {
             }
         }
 
-        a.glyphicon-play {
+        a.glyphicon-play,
+        a.glyphicon-pause, {
             @include border-radius(50px);
 
             position: relative;

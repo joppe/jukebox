@@ -34,8 +34,11 @@
             _.each(this.model, function (ClassName, identifier) {
                 var data = response[identifier];
 
-                if (ClassName === 'variant') {
+                if (ClassName === 'variant' || ClassName === 'string') {
                     attributes[identifier] = data;
+                } else if (ClassName === 'integer') {
+                    data = parseInt(data, 10);
+                    attributes[identifier] = isNaN(data) ? 0 : data;
                 } else {
                     attributes[identifier] = new Model[ClassName](data, {
                         parse: true
@@ -57,7 +60,8 @@
             songid: 'variant',
             state: 'variant',
             volume: 'variant',
-            xfade: 'variant'
+            xfade: 'variant',
+            time: 'variant'
         },
 
         url: '/mpd/status'
@@ -70,8 +74,8 @@
             Genre: 'variant',
             Id: 'variant',
             'Last-Modified': 'variant',
-            Pos: 'variant',
-            Time: 'variant',
+            Pos: 'integer',
+            Time: 'integer',
             Title: 'variant',
             Track: 'variant',
             file: 'variant'

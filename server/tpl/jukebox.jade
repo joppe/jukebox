@@ -17,19 +17,20 @@ html
     body
         div.player
             div.info
-                div.artist Lorem ipsum dolor sit amet - Proin sollicitudin
-                div.song Morbi lobortis sagittis justo non vehicula
+                div.artist &nbsp;
+                div.song &nbsp;
             div.status
                 div.progress
-                    div.bar(style='width: 40%;')
+                    div.bar
                 div.time
                     span.played
+                    span.divider -
                     span.total
             div.playback
                 div.previous-next
-                    a.bttn.glyphicon.glyphicon-step-backward
-                    a.bttn.glyphicon.glyphicon-step-forward
-                a.bttn.glyphicon.glyphicon-play
+                    a.bttn.glyphicon.glyphicon-step-backward(href='/mpd/previous')
+                    a.bttn.glyphicon.glyphicon-step-forward(href='/mpd/next')
+                a.bttn.glyphicon.glyphicon-play(data-play='/mpd/play',data-pause='/mpd/pause')
             div.volume
                 a.bttn.glyphicon.glyphicon-volume-down(href='/mpd/volume')
                 span.volume

@@ -29,10 +29,23 @@
                 el: this.$container.find('div.volume'),
                 model: this.status
             });
+            new Player.View.CurrentSong({
+                el: this.$container.find('div.info'),
+                model: this.currentsong
+            });
+            new Player.View.Controls({
+                el: this.$container.find('div.playback'),
+                model: this.status
+            });
+            var p = new Player.View.Progress({
+                el: this.$container.find('div.status'),
+                model: this.status
+            });
         },
 
         update: function () {
             this.status.fetch();
+            this.currentsong.fetch();
         }
     };
 
