@@ -33,7 +33,7 @@ module.exports = (function () {
      * @param {Buffer} rawData
      * @returns {{hasError: Function, getError: Function, getLines: Function, getProperty: Function, getProperties: Function, getData: Function, toJSON: Function}}
      */
-    function create(rawData) {
+    function parse(rawData) {
         var data = rawData.toString().replace(/^\s+|\s+$/g, ''),
             lines = data.split('\n'),
             error = false;
@@ -103,6 +103,6 @@ module.exports = (function () {
     }
 
     return {
-        create: create
+        parse: parse
     };
 }());
