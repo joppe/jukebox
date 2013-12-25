@@ -1,6 +1,6 @@
 ## TODO
 
-- make a config.json for config options
+- ~~make a config.json for config options~~
 - use websocket
 - show playlist
 - create a search
