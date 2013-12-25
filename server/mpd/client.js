@@ -3,7 +3,7 @@
 module.exports = (function () {
     'use strict';
 
-    var response = require('./response/response.js'),
+    var parser = require('./response/parser.js'),
         errorResponse = require('./response/error.js'),
         statsResponse = require('./response/status.js'),
         songResponse = require('./response/song.js'),
@@ -26,7 +26,7 @@ module.exports = (function () {
                     response;
 
                 if (callback !== undefined) {
-                    parsedData = response.create(data);
+                    parsedData = parser.parse(data);
 
                     if (parsedData.hasError()) {
                         response = errorResponse.create(parsedData);
