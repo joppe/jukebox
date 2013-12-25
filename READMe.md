@@ -1,3 +1,7 @@
 ## TODO
 
-- let mpd/client create the connection
+- make a config.json for config options
+- use websocket
+- show playlist
+- create a search
+- send status updates after certain actions to all registered (browser) clients
