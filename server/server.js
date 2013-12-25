@@ -2,12 +2,12 @@
 
 var express = require('express'),
     socket = require('./tcp/socket.js'),
+    config = require('../config/jukebox.json'),
     connection,
     mpdc,
-    app = express(),
-    port = 3000;
+    app = express();
 
-connection = socket.connect(6600, 'localhost', function () {
+connection = socket.connect(config.mpd.port, config.mpd.host, function () {
     'use strict';
 
     console.log('onerror');
@@ -179,6 +179,6 @@ app.post('/mpd/lsinfo', function (req, res) {
     });
 });
 
-app.listen(port);
+app.listen(config.application.port);
 //console.log('Listening on port 3000');
 //console.log(__dirname + '/client');
