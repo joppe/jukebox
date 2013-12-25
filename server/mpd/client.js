@@ -17,17 +17,26 @@ module.exports = (function () {
 
         /**
          * @param {string} command
-         * @param {Function} [success]
-         * @param {Function} [error]
+         * @param {Function} [callback]
+         * @param {Object} [responseType]
          */
-        transmitCommand = function (command, success, error) {
+        transmitCommand = function (command, callback, responseType) {
             connection.command(command, function (data) {
-                var parsedData = response.create(data);
+                var parsedData,
+                    response;
 
-                if (!parsedData.hasError() && success) {
-                    success(parsedData);
-                } else if (parsedData.hasError() && error) {
-                    error(parsedData);
+                if (callback !== undefined) {
+                    parsedData = response.create(data);
+
+                    if (parsedData.hasError()) {
+                        response = errorResponse.create(parsedData);
+                    } else if (responseType === undefined) {
+                        response = responseType.create(parsedData);
+                    } else {
+                        response = parsedData.getProperties();
+                    }
+
+                    callback(response);
                 }
             });
         };
@@ -47,68 +56,70 @@ module.exports = (function () {
              * @param {Function} [callback]
              */
             kill: function (callback) {
-                transmitCommand('kill', function () {
-                    callback('Successfully killed mpd service');
-                }, function (response) {
-                    callback(errorResponse.create(response));
-                });
+                transmitCommand('kill', callback);
             },
 
             /**
              * @param {Function} callback
              */
             status: function (callback) {
-                transmitCommand('status', function (response) {
-                    callback(statusResponse.create(response));
-                }, function (response) {
-                    callback(errorResponse.create(response));
-                });
+                transmitCommand('status', callback, statusResponse);
             },
 
             /**
              * @param {Function} callback
              */
             stats: function (callback) {
-                transmitCommand('stats', function (response) {
-                    callback(statsResponse.create(response));
-                }, function (response) {
-                    callback(errorResponse.create(response));
-                });
+                transmitCommand('stats', callback, statsResponse);
             },
 
             /**
              * @param {Function} callback
              */
             currentsong: function (callback) {
-                transmitCommand('currentsong', function (response) {
-                    callback(songResponse.create(response));
-                }, function (response) {
-                    callback(errorResponse.create(response));
-                });
+                transmitCommand('currentsong', callback, songResponse);
             },
 
-            play: function () {
-                transmitCommand('play');
+            /**
+             * @param {Function} callback
+             */
+            play: function (callback) {
+                transmitCommand('play', callback);
             },
 
-            stop: function () {
-                transmitCommand('stop');
+            /**
+             * @param {Function} callback
+             */
+            stop: function (callback) {
+                transmitCommand('stop', callback);
             },
 
-            next: function () {
-                transmitCommand('next');
+            /**
+             * @param {Function} callback
+             */
+            next: function (callback) {
+                transmitCommand('next', callback);
             },
 
-            previous: function () {
-                transmitCommand('previous');
+            /**
+             * @param {Function} callback
+             */
+            previous: function (callback) {
+                transmitCommand('previous', callback);
             },
 
-            pause: function () {
-                transmitCommand('pause 1');
+            /**
+             * @param {Function} callback
+             */
+            pause: function (callback) {
+                transmitCommand('pause 1', callback);
             },
 
-            resume: function () {
-                transmitCommand('pause 0');
+            /**
+             * @param {Function} callback
+             */
+            resume: function (callback) {
+                transmitCommand('pause 0', callback);
             },
 
             /**
@@ -123,22 +134,14 @@ module.exports = (function () {
              * @param {Function} callback
              */
             playid: function (id, callback) {
-                transmitCommand('playid ' + id, function (response) {
-                    callback(response.getProperties());
-                }, function (response) {
-                    callback(errorResponse.create(response));
-                });
+                transmitCommand('playid ' + id, callback);
             },
 
             /**
              * @param {Function} callback
              */
             playlistinfo: function (callback) {
-                transmitCommand('playlistinfo', function (response) {
-                    callback(songsResponse.create(response));
-                }, function (response) {
-                    callback(errorResponse.create(response));
-                });
+                transmitCommand('playlistinfo', callback, songsResponse);
             },
 
             /**
@@ -146,11 +149,7 @@ module.exports = (function () {
              * @param {Function} callback
              */
             addid: function (uri, callback) {
-                transmitCommand('addid ' + prepareArgument(uri), function (response) {
-                    callback(response.getProperties());
-                }, function (response) {
-                    callback(errorResponse.create(response));
-                });
+                transmitCommand('addid ' + prepareArgument(uri), callback);
             },
 
             /**
@@ -158,19 +157,21 @@ module.exports = (function () {
              * @param {Function} callback
              */
             deleteid: function (id, callback) {
-                transmitCommand('deleteid ' + id, function (response) {
-                    callback(response.getProperties());
-                }, function (response) {
-                    callback(errorResponse.create(response));
-                });
+                transmitCommand('deleteid ' + id, callback);
             },
 
-            clear: function () {
-                transmitCommand('clear');
+            /**
+             * @param {Function} callback
+             */
+            clear: function (callback) {
+                transmitCommand('clear', callback);
             },
 
-            shuffle: function () {
-                transmitCommand('shuffle');
+            /**
+             * @param {Function} callback
+             */
+            shuffle: function (callback) {
+                transmitCommand('shuffle', callback);
             },
 
             /**
@@ -178,11 +179,7 @@ module.exports = (function () {
              * @param {Function} callback
              */
             search: function (query, callback) {
-                transmitCommand('search any ' + prepareArgument(query), function (response) {
-                    callback(songsResponse.create(response));
-                }, function (response) {
-                    callback(errorResponse.create(response));
-                });
+                transmitCommand('search any ' + prepareArgument(query), callback, songsResponse);
             },
 
             /**
@@ -196,11 +193,7 @@ module.exports = (function () {
                     command += ' ' + prepareArgument(uri);
                 }
 
-                transmitCommand(command, function (response) {
-                    callback(songsResponse.create(response));
-                }, function (response) {
-                    callback(errorResponse.create(response));
-                });
+                transmitCommand(command, callback, songsResponse);
             }
         };
 
