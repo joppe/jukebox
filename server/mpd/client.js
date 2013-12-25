@@ -32,6 +32,10 @@ module.exports = (function () {
             });
         };
 
+        /**
+         * @param {string} arg
+         * @returns {string}
+         */
         prepareArgument = function (arg) {
             return '"' + arg.replace('"', '\\"') + '"';
         };
