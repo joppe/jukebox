@@ -30,7 +30,7 @@ module.exports = (function () {
 
                     if (parsedData.hasError()) {
                         response = errorResponse.create(parsedData);
-                    } else if (responseType === undefined) {
+                    } else if (responseType !== undefined) {
                         response = responseType.create(parsedData);
                     } else {
                         response = parsedData.getProperties();
@@ -125,8 +125,8 @@ module.exports = (function () {
             /**
              * @param {number} volume
              */
-            volume: function (volume) {
-                transmitCommand('setvol ' + volume);
+            volume: function (volume, callback) {
+                transmitCommand('setvol ' + volume, callback);
             },
 
             /**

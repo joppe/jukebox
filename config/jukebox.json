@@ -1,9 +1,6 @@
 {
     "application": {
-        "port": 3000
-    },
-    "mpd": {
-        "host": "localhost",
-        "port": 6600
+        "port": 3000,
+        "urlPrefix": "mpd"
     }
 }
