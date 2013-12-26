@@ -7,6 +7,10 @@ module.exports = (function () {
         socket = require('../tcp/socket.js');
 
     return {
+        /**
+         * @param {Function} expressApp
+         * @param {string} urlPrefix
+         */
         listen: function (expressApp, urlPrefix) {
             var connection,
                 mpdc;
