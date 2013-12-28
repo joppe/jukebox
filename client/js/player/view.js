@@ -1,4 +1,4 @@
-/*global window, Backbone*/
+/*global window, Backbone, Commander*/
 
 (function (win, $) {
     'use strict';
@@ -38,8 +38,9 @@
             volume = Math.max(volume, 0);
             volume = Math.min(volume, 100);
 
-            this.model.set('volume', volume);
-            this.model.save();
+            Commander.send('volume', {
+                volume: volume
+            });
         },
 
         volumeDown: function (event) {

@@ -62,7 +62,7 @@
             song: 'variant',
             songid: 'variant',
             state: 'variant',
-            volume: 'Volume',
+            volume: 'variant',
             xfade: 'variant',
             time: 'variant'
         }
@@ -97,14 +97,6 @@
             response = response.songs || {};
 
             return response;
-        }
-    });
-
-    Model.Volume = Model.Song.extend({
-        url: '/mpd/volume',
-
-        parse: function (volume) {
-            this.set('volume', volume);
         }
     });
 

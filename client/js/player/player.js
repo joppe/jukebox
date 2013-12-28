@@ -1,14 +1,29 @@
-/*global window, Player, Backbone, io, _*/
+/*global window, Player, Backbone, io, _, jQuery, Commander*/
 
-(function (win) {
+(function (win, $) {
     'use strict';
 
     if (win.Player === undefined) {
         win.Player = {};
     }
 
-    // Sync with websocket
-    Backbone.sync = (function () {
+    /*/ XHR version
+    Commander = (function () {
+        return {
+            send: function (command, data, callback) {
+                $.ajax({
+                    url: command,
+                    type: data ? 'POST' : 'GET',
+                    data: data,
+                    success: callback
+                });
+            }
+        };
+    }());
+    /**/
+
+    // Websocket version
+    win.Commander = (function () {
         var socket = io.connect(),
             pool = {};
 
@@ -18,40 +33,52 @@
             if (data.syncId && pool[data.syncId]) {
                 listener = pool[data.syncId];
 
-                if (listener.options.success) {
-                    listener.options.success.call(this, data.data);
+                if (typeof listener.callback === 'function') {
+                    listener.callback.call(this, data.data);
                 }
 
                 delete pool[data.syncId];
             }
         });
 
-        return function (method, model, options) {
-            var id = _.uniqueId('sync-'),
-                url;
+        return {
+            /**
+             * @param {string} command
+             * @param {Object} data
+             * @param {Function} callback
+             */
+            send: function (command, data, callback) {
+                var id = _.uniqueId('sync-');
 
-            pool[id] = {
-                options: options
-            };
+                pool[id] = {
+                    callback: callback
+                };
 
-            if (typeof model.url === 'function') {
-                url = model.url();
-            } else {
-                url = model.url;
+                socket.emit('control', {
+                    action: command,
+                    attributes: data,
+                    syncId: id
+                });
             }
-
-            socket.emit('control', {
-                action: url.replace('/mpd/', ''),
-                attributes: model.attributes,
-                syncId: id
-            });
         };
     }());
     /**/
 
-    win.Player.Player = function ($container) {
-        var self = this;
+    // Alternative sync
+    Backbone.sync = function (method, model, options) {
+        var url;
 
+        if (typeof model.url === 'function') {
+            url = model.url();
+        } else {
+            url = model.url;
+        }
+
+        Commander.send(url.replace('/mpd/', ''), model.attributes, options.success);
+    };
+    /**/
+
+    win.Player.Player = function ($container) {
         this.$container = $container;
 
         this.playlist = new Player.Model.Playlist();
@@ -60,10 +87,6 @@
 
         this.createViews();
         this.update();
-
-//        window.setTimeout(function () {
-//            self.update();
-//        }, 3000);
     };
     Player.Player.prototype = {
         createViews: function () {
@@ -91,4 +114,4 @@
         }
     };
 
-}(window));
+}(window, jQuery));
