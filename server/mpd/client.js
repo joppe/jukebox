@@ -10,10 +10,17 @@ module.exports = (function () {
         songsResponse = require('./response/songs.js'),
         statusResponse = require('./response/status.js');
 
+    /**
+     * @param {string} arg
+     * @returns {string}
+     */
+    function prepareArgument(arg) {
+        return '"' + arg.replace('"', '\\"') + '"';
+    }
+
     function create(connection) {
         var client,
-            transmitCommand,
-            prepareArgument;
+            transmitCommand;
 
         /**
          * @param {string} command
@@ -39,14 +46,6 @@ module.exports = (function () {
                     callback(response);
                 }
             });
-        };
-
-        /**
-         * @param {string} arg
-         * @returns {string}
-         */
-        prepareArgument = function (arg) {
-            return '"' + arg.replace('"', '\\"') + '"';
         };
 
         client = {
