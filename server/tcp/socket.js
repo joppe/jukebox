@@ -40,6 +40,7 @@ module.exports = (function () {
                 client.on('connect', function () {
                     connected = true;
                     socket.processQueue();
+                    onsuccess();
                 });
 
                 client.on('end', function () {
