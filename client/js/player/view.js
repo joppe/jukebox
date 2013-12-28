@@ -20,7 +20,7 @@
         initialize: function () {
             this.$percentage = this.$el.find('span.volume');
 
-            this.model.on('change', this.update, this);
+            this.model.on('change:volume', this.update, this);
         },
 
         update: function () {
@@ -38,11 +38,8 @@
             volume = Math.max(volume, 0);
             volume = Math.min(volume, 100);
 
-            $.post('/mpd/volume', {
-                volume: volume
-            }, function () {
-//                win.console.log('posted');
-            });
+            this.model.set('volume', volume);
+            this.model.save();
         },
 
         volumeDown: function (event) {

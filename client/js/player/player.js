@@ -1,4 +1,4 @@
-/*global window, Player*/
+/*global window, Player, Backbone, io, _*/
 
 (function (win) {
     'use strict';
@@ -6,6 +6,48 @@
     if (win.Player === undefined) {
         win.Player = {};
     }
+
+    // Sync with websocket
+    Backbone.sync = (function () {
+        var socket = io.connect(),
+            pool = {};
+
+        socket.on('update', function (data) {
+            var listener;
+
+            if (data.syncId && pool[data.syncId]) {
+                listener = pool[data.syncId];
+
+                if (listener.options.success) {
+                    listener.options.success.call(this, data.data);
+                }
+
+                delete pool[data.syncId];
+            }
+        });
+
+        return function (method, model, options) {
+            var id = _.uniqueId('sync-'),
+                url;
+
+            pool[id] = {
+                options: options
+            };
+
+            if (typeof model.url === 'function') {
+                url = model.url();
+            } else {
+                url = model.url;
+            }
+
+            socket.emit('control', {
+                action: url.replace('/mpd/', ''),
+                attributes: model.attributes,
+                syncId: id
+            });
+        };
+    }());
+    /**/
 
     win.Player.Player = function ($container) {
         var self = this;
@@ -19,9 +61,9 @@
         this.createViews();
         this.update();
 
-        window.setTimeout(function () {
-            self.update();
-        }, 3000);
+//        window.setTimeout(function () {
+//            self.update();
+//        }, 3000);
     };
     Player.Player.prototype = {
         createViews: function () {
@@ -37,7 +79,7 @@
                 el: this.$container.find('div.playback'),
                 model: this.status
             });
-            var p = new Player.View.Progress({
+            new Player.View.Progress({
                 el: this.$container.find('div.status'),
                 model: this.status
             });

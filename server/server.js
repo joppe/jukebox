@@ -6,7 +6,7 @@ var express = require('express'),
     mpdController = require('./mpd/controller.js'),
     app = express(),
     server = http.createServer(app),
-    io = require('socket.io').listen(server);
+    io = require('socket.io').listen(server, {log: false});
 
 // express configuration
 app.use(express.bodyParser());
@@ -37,4 +37,24 @@ server.listen(config.application.port);
 
 io.sockets.on('connection', function (socket) {
     console.log('connection event');
+
+    /**
+     * @var {{action: {string}, attributes: {Object}, syncId: {string}}} data
+     */
+    socket.on('control', function (data) {
+        var argument;
+
+        switch (data.action) {
+        case 'volume':
+            argument = data.attributes.volume;
+            break;
+        }
+
+        mpdController.proxy(data.action, argument, function (response) {
+            socket.emit('update', {
+                syncId: data.syncId,
+                data: response
+            });
+        });
+    });
 });

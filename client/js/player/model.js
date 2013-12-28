@@ -49,7 +49,10 @@
             return attributes;
         }
     });
+
     Model.Status = Model.AbstractBase.extend({
+        url: '/mpd/status',
+
         model: {
             playlist: 'variant',
             playlistlength: 'variant',
@@ -59,13 +62,12 @@
             song: 'variant',
             songid: 'variant',
             state: 'variant',
-            volume: 'variant',
+            volume: 'Volume',
             xfade: 'variant',
             time: 'variant'
-        },
-
-        url: '/mpd/status'
+        }
     });
+
     Model.Song = Model.AbstractBase.extend({
         model: {
             Album: 'variant',
@@ -81,11 +83,13 @@
             file: 'variant'
         }
     });
+
     Model.Currentsong = Model.Song.extend({
-        url: 'mpd/currentsong'
+        url: '/mpd/currentsong'
     });
+
     Model.Playlist = Backbone.Collection.extend({
-        url: 'mpd/playlistinfo',
+        url: '/mpd/playlistinfo',
 
         model: Model.Song,
 
@@ -93,6 +97,14 @@
             response = response.songs || {};
 
             return response;
+        }
+    });
+
+    Model.Volume = Model.Song.extend({
+        url: '/mpd/volume',
+
+        parse: function (volume) {
+            this.set('volume', volume);
         }
     });
 
