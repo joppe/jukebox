@@ -4,132 +4,128 @@ module.exports = (function () {
     'use strict';
 
     var config = require('../../config/mpd.json'),
-        socket = require('../tcp/socket.js');
+        socket = require('../tcp/socket.js'),
+        getClient;
+
+    getClient = (function () {
+        var client = null;
+
+        /**
+         * @param {Function} callback
+         */
+        function createClient(callback) {
+            var mpdc,
+                connection;
+
+            connection = socket.connect(config.mpd.port, config.mpd.host, function () {
+                mpdc = require('./client.js').create(connection);
+
+                callback(mpdc);
+            },function () {
+                callback(false);
+            });
+        }
+
+        return function (callback) {
+            if (null === client) {
+                createClient(function (mpdc) {
+                    client = mpdc;
+                    callback(mpdc);
+                });
+            } else {
+                callback(client);
+            }
+        };
+    }());
 
     return {
+        /**
+         * @param {string} control
+         * @param {*} argument
+         * @param {Function} callback
+         */
+        proxy: function (control, argument, callback) {
+            getClient(function (client) {
+                var args = [];
+
+                if (null === client) {
+                    callback('MPD is not running');
+                } else if (client[control] === undefined) {
+                    callback('Control "' + control + '" unavailable');
+                } else {
+                    if (argument) {
+                        args.push(argument);
+                    }
+                    args.push(callback);
+
+                    client[control].apply(client, args);
+                }
+            });
+        },
+
         /**
          * @param {Function} expressApp
          * @param {string} urlPrefix
          */
         listen: function (expressApp, urlPrefix) {
-            var connection,
-                mpdc;
+            var proxy = this.proxy;
 
-            connection = socket.connect(config.mpd.port, config.mpd.host, function () {
-                console.log('connection error, maybe MPD is not running...');
+            ['kill', 'status', 'stats', 'currentsong', 'play', 'stop', 'next', 'previous', 'pause', 'resume', 'playlistinfo', 'clear', 'shuffle'].forEach(function (control) {
+                expressApp.get('/' + urlPrefix + '/' + control, function (req, res) {
+                    proxy(control, undefined, function (data) {
+                        res.send(data);
+                    });
+                });
             });
 
-            mpdc = require('./client.js').create(connection);
-
-            expressApp.get('/' + urlPrefix + '/kill', function (req, res) {
-                mpdc.kill(function (message) {
-                    res.send(message);
-                });
-            });
-            expressApp.get('/' + urlPrefix + '/status', function (req, res) {
-                mpdc.status(function (response) {
-                    res.send(response);
-                });
-            });
-            expressApp.get('/' + urlPrefix + '/stats', function (req, res) {
-                mpdc.stats(function (response) {
-                    res.send(response);
-                });
-            });
-            expressApp.get('/' + urlPrefix + '/currentsong', function (req, res) {
-                mpdc.currentsong(function (response) {
-                    res.send(response);
-                });
-            });
-            expressApp.get('/' + urlPrefix + '/play', function (req, res) {
-                mpdc.play(function (response) {
-                    res.send(response);
-                });
-            });
-            expressApp.get('/' + urlPrefix + '/stop', function (req, res) {
-                mpdc.stop(function (response) {
-                    res.send(response);
-                });
-            });
-            expressApp.get('/' + urlPrefix + '/next', function (req, res) {
-                mpdc.next(function (response) {
-                    res.send(response);
-                });
-            });
-            expressApp.get('/' + urlPrefix + '/previous', function (req, res) {
-                mpdc.previous(function (response) {
-                    res.send(response);
-                });
-            });
-            expressApp.get('/' + urlPrefix + '/pause', function (req, res) {
-                mpdc.pause(function (response) {
-                    res.send(response);
-                });
-            });
-            expressApp.get('/' + urlPrefix + '/resume', function (req, res) {
-                mpdc.resume(function (response) {
-                    res.send(response);
-                });
-            });
-            expressApp.post('/' + urlPrefix + '/volume', function (req, res) {
+            expressApp.post('/' + urlPrefix + '/', function (req, res) {
                 var volume = parseInt(req.body.volume, 10);
 
                 if (false === isNaN(volume)) {
-                    mpdc.volume(volume, function (response) {
-                        res.send(response);
+                    proxy('volume', volume, function (data) {
+                        res.send(data);
                     });
                 } else {
                     res.send('volume must be an integer (' + volume + ')');
                 }
             });
+
             expressApp.post('/' + urlPrefix + '/playid', function (req, res) {
                 var playid = req.body.playid;
 
-                mpdc.playid(playid, function (info) {
-                    res.send(info);
+                proxy('playid', playid, function (data) {
+                    res.send(data);
                 });
             });
-            expressApp.get('/' + urlPrefix + '/playlistinfo', function (req, res) {
-                mpdc.playlistinfo(function (info) {
-                    res.send(info);
-                });
-            });
+
             expressApp.post('/' + urlPrefix + '/addid', function (req, res) {
-                var uri = req.body.uri;
+                var addid = req.body.uri;
 
-                mpdc.addid(uri, function (info) {
-                    res.send(info);
+                proxy('addid', addid, function (data) {
+                    res.send(data);
                 });
             });
+
             expressApp.post('/' + urlPrefix + '/deleteid', function (req, res) {
-                var id = req.body.id;
+                var deleteid = req.body.id;
 
-                mpdc.deleteid(id, function (info) {
-                    res.send(info);
+                proxy('deleteid', deleteid, function (data) {
+                    res.send(data);
                 });
             });
-            expressApp.get('/' + urlPrefix + '/clear', function (req, res) {
-                mpdc.clear(function (response) {
-                    res.send(response);
-                });
-            });
-            expressApp.get('/' + urlPrefix + '/shuffle', function (req, res) {
-                mpdc.shuffle(function (response) {
-                    res.send(response);
-                });
-            });
+
             expressApp.post('/' + urlPrefix + '/search', function (req, res) {
                 var query = req.body.query;
 
-                mpdc.search(query, function (info) {
-                    res.send(info);
+                proxy('search', query, function (data) {
+                    res.send(data);
                 });
             });
             expressApp.post('/' + urlPrefix + '/lsinfo', function (req, res) {
                 var uri = req.body.uri;
 
-                mpdc.lsinfo(uri, function (info) {
-                    res.send(info);
+                proxy('lsinfo', uri, function (data) {
+                    res.send(data);
                 });
             });
         }
