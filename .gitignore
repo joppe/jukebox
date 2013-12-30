@@ -5,3 +5,5 @@ doc/.project
 client/css/screen.css
 client/css/debug.css
 bower_components/
+config/mpd.json
+config/jukebox.json
