@@ -11,13 +11,27 @@
 
     win.Player.View = View = {};
 
-    View.Volume = Backbone.View.extend({
+    View.AbstractBase = Backbone.View.extend({
+        /**
+         * @param {Object} options
+         */
+        initialize: function (options) {
+            this.conncetion = options.conncetion;
+        }
+    });
+
+    View.Volume = View.AbstractBase.extend({
         events: {
             'click .glyphicon-volume-down': 'volumeDown',
             'click .glyphicon-volume-up': 'volumeUp'
         },
 
-        initialize: function () {
+        /**
+         * @param {Object} options
+         */
+        initialize: function (options) {
+            View.AbstractBase.prototype.initialize.call(this, options);
+
             this.$percentage = this.$el.find('span.volume');
 
             this.model.on('change:volume', this.update, this);
@@ -27,6 +41,9 @@
             this.$percentage.text(this.model.get('volume') + '%');
         },
 
+        /**
+         * @param {number} amount
+         */
         volume: function (amount) {
             var volume = parseInt(this.model.get('volume'), 10);
 
@@ -38,17 +55,23 @@
             volume = Math.max(volume, 0);
             volume = Math.min(volume, 100);
 
-            Commander.send('volume', {
+            this.conncetion.send('volume', {
                 volume: volume
             });
         },
 
+        /**
+         * @param {Event} event
+         */
         volumeDown: function (event) {
             event.preventDefault();
 
             this.volume(-5);
         },
 
+        /**
+         * @param {Event} event
+         */
         volumeUp: function (event) {
             event.preventDefault();
 
@@ -56,9 +79,12 @@
         }
     });
 
-    View.CurrentSong = Backbone.View.extend({
+    View.CurrentSong = View.AbstractBase.extend({
+        /**
+         * @param {Object} options
+         */
         initialize: function (options) {
-            this.model = options.model;
+            View.AbstractBase.prototype.initialize.call(this, options);
 
             this.$artist = this.$el.find('div.artist');
             this.$song = this.$el.find('div.song');
@@ -72,8 +98,14 @@
         }
     });
 
-    View.Progress = Backbone.View.extend({
-        initialize: function () {
+    View.Progress = View.AbstractBase.extend({
+
+        /**
+         * @param {Object} options
+         */
+        initialize: function (options) {
+            View.AbstractBase.prototype.initialize.call(this, options);
+
             this.$bar = this.$el.find('div.bar');
             this.$played = this.$el.find('span.played');
             this.$total = this.$el.find('span.total');
@@ -93,6 +125,10 @@
             this.$total.text(this.toTime(total));
         },
 
+        /**
+         * @param {number} seconds
+         * @returns {string}
+         */
         toTime: function (seconds) {
             var parts = [60 * 60, 60, 1],
                 time = [];
@@ -107,6 +143,12 @@
             return time.join(':');
         },
 
+        /**
+         * @param {string} str
+         * @param {number} length
+         * @param {string} char
+         * @returns {string}
+         */
         strPad: function (str, length, char) {
             var padLength = length - str.length;
 
@@ -120,8 +162,13 @@
         }
     });
 
-    View.Controls = Backbone.View.extend({
-        initialize: function () {
+    View.Controls = View.AbstractBase.extend({
+        /**
+         * @param {Object} options
+         */
+        initialize: function (options) {
+            View.AbstractBase.prototype.initialize.call(this, options);
+
             this.$play = this.$el.find('a.glyphicon-play');
             this.$next = this.$el.find('a.glyphicon-step-forward');
             this.$previous = this.$el.find('a.glyphicon-step-backward');
@@ -163,14 +210,11 @@
             });
         },
 
+        /**
+         * @param {string} url
+         */
         command: function (url) {
-            $.ajax({
-                url: url,
-                type: 'GET',
-                success: function (res) {
-//                    console.log(res);
-                }
-            });
+            this.conncetion.send(url);
         },
 
         update: function () {
@@ -184,4 +228,17 @@
         }
     });
 
+    View.Playlist = View.AbstractBase.extend({
+        /**
+         * @param {Object} options
+         */
+        initialize: function (options) {
+            View.AbstractBase.prototype.initialize.call(this, options);
+
+            this.model.on('change', this.update, this);
+        },
+
+        update: function () {
+        }
+    });
 }(window, jQuery));

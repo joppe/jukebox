@@ -18,10 +18,17 @@
         model: {},
 
         /**
-         * @param {string} url
+         * @param {Object} [attributes]
+         * @param {Object} [options]
          */
-        setUrlRoot: function (url) {
-            this.urlRoot = url;
+        initialize: function (attributes, options) {
+            if (options) {
+                this.options = options;
+
+                if (options.urlRoot) {
+                    this.urlRoot = options.urlRoot;
+                }
+            }
         },
 
         /**
@@ -51,7 +58,7 @@
     });
 
     Model.Status = Model.AbstractBase.extend({
-        url: '/mpd/status',
+        url: 'status',
 
         model: {
             playlist: 'variant',
@@ -85,11 +92,11 @@
     });
 
     Model.Currentsong = Model.Song.extend({
-        url: '/mpd/currentsong'
+        url: 'currentsong'
     });
 
     Model.Playlist = Backbone.Collection.extend({
-        url: '/mpd/playlistinfo',
+        url: 'playlistinfo',
 
         model: Model.Song,
 

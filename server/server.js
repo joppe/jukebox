@@ -36,6 +36,8 @@ mpdController.listen(app, config.application.urlPrefix);
 server.listen(config.application.port);
 
 io.sockets.on('connection', function (socket) {
+    'use strict';
+
     console.log('connection event');
 
     /**
@@ -53,7 +55,8 @@ io.sockets.on('connection', function (socket) {
         mpdController.proxy(data.action, argument, function (response) {
             socket.emit('update', {
                 syncId: data.syncId,
-                data: response
+                data: response,
+                action: data.action
             });
         });
     });
