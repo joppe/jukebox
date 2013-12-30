@@ -22,6 +22,7 @@
 
     // Websocket version
     win.Connection = Connection = function (urlRoot) {
+        this.urlRoot = urlRoot;
         this.socket = io.connect();
         this.pool = {};
 
@@ -44,12 +45,13 @@
 
     _.extend(Connection.prototype, Backbone.Events, {
         /**
-         * @param {string} command
+         * @param {string} url
          * @param {Object} data
          * @param {Function} callback
          */
-        send: function (command, data, callback) {
-            var id = _.uniqueId('sync-');
+        send: function (url, data, callback) {
+            var command = url.replace(this.urlRoot, ''),
+                id = _.uniqueId('sync-');
 
             if (_.isFunction(callback)) {
                 this.pool[id] = {
