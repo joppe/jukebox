@@ -14,14 +14,16 @@ module.exports = (function () {
         response.getLines().forEach(function (line) {
             var property = response.getProperty(line);
 
-            if (property.name === 'file') {
-                if (song !== null) {
-                    songs.push(song);
+            if (property) {
+                if (property.name === 'file') {
+                    if (song !== null) {
+                        songs.push(song);
+                    }
+                    song = {};
                 }
-                song = {};
-            }
 
-            song[property.name] = property.value;
+                song[property.name] = property.value;
+            }
         });
 
         if (song !== null) {
