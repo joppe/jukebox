@@ -45,7 +45,7 @@ io.sockets.on('connection', function (socket) {
      */
     socket.on('control', function (data) {
         var argument;
-console.log(data.action);
+
         switch (data.action) {
         case 'volume':
             argument = data.attributes.volume;
@@ -60,15 +60,19 @@ console.log(data.action);
             });
         });
     });
+});
 
-    setInterval(function () {
+(function hartbeat() {
+    setTimeout(function () {
         ['status', 'currentsong', 'playlistinfo'].forEach(function (action) {
             mpdController.proxy(action, undefined, function (response) {
-                socket.broadcast.emit('update', {
+                io.sockets.emit('update', {
                     data: response,
                     action: action
                 });
             });
         });
+
+        hartbeat();
     }, 250);
-});
+}());
