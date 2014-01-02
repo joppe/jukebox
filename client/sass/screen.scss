@@ -197,3 +197,48 @@ div.player {
         }
     }
 }
+
+div.playlist {
+    padding: 10px;
+
+    ol {
+        @include reset-list();
+        @include border-radius(5px);
+
+        border: 1px solid #000000;
+        border-bottom: none;
+        background: #ffffff;
+
+        li {
+            &:first-child {
+                @include border-radius(5px, 5px, 0, 0);
+            }
+            &:last-child {
+                @include border-radius(0, 0, 5px, 5px);
+            }
+
+            padding: 5px 10px;
+            border-bottom: 1px solid #000000;
+
+            a {
+                display: block;
+                text-decoration: none;
+            }
+
+            &:hover {
+                a {
+                    color: #222222;
+                }
+            }
+
+            &.playing {
+                background: #428bca;
+
+                a {
+                    color: #ffffff;
+                    font-weight: bold;
+                }
+            }
+        }
+    }
+}

@@ -1,4 +1,4 @@
-/*global require, __dirname */
+/*global require, __dirname, setTimeout*/
 
 var express = require('express'),
     http = require('http'),
@@ -50,6 +50,9 @@ io.sockets.on('connection', function (socket) {
         case 'volume':
             argument = data.attributes.volume;
             break;
+        case 'playid':
+            argument = data.attributes.playid;
+            break;
         }
 
         mpdController.proxy(data.action, argument, function (response) {
@@ -63,6 +66,8 @@ io.sockets.on('connection', function (socket) {
 });
 
 (function hartbeat() {
+    'use strict';
+
     setTimeout(function () {
         ['status', 'currentsong', 'playlistinfo'].forEach(function (action) {
             mpdController.proxy(action, undefined, function (response) {

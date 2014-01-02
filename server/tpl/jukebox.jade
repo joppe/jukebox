@@ -37,5 +37,11 @@ html
                 a.bttn.glyphicon.glyphicon-volume-down(href='/mpd/volume')
                 span.volume
                 a.bttn.glyphicon.glyphicon-volume-up(href='/mpd/volume')
+        div.playlist
+            h3 Playlist
+            ol
+        script(type='text/js-template', id='playlist-item')
+            li
+                a(href='javascript:void(null);') <%= artist %> - <%= title %>
 
 

@@ -1,4 +1,4 @@
-/*global window, Backbone, Commander*/
+/*global window, Backbone, _*/
 
 (function (win, $) {
     'use strict';
@@ -235,10 +235,85 @@
         initialize: function (options) {
             View.AbstractBase.prototype.initialize.call(this, options);
 
-            this.model.on('change', this.update, this);
+            this.$itemContainer = this.$el.find('ol');
+            this.currentsong = options.currentsong;
+            this.itemTemplate = _.template(options.$itemTemplate.html());
+
+            this.model.on('add', this.add, this);
+            this.model.on('remove', this.remove, this);
+
+            this.render();
+        },
+
+        remove: function () {
+            this.render();
+        },
+
+        reset: function () {
+            this.$itemContainer.empty();
+        },
+
+        add: function (song) {
+            (new View.PlaylistItem({
+                model: song,
+                template: this.itemTemplate,
+                currentsong: this.currentsong,
+                conncetion: this.conncetion
+            })).render(this.$itemContainer);
+        },
+
+        render: function () {
+            this.reset();
+
+            this.model.each(function (song) {
+                this.add(song);
+            }, this);
+        }
+    });
+
+    View.PlaylistItem = View.AbstractBase.extend({
+        events: {
+            'click a': 'setPlayId'
+        },
+
+        /**
+         * @param {Object} options
+         */
+        initialize: function (options) {
+            View.AbstractBase.prototype.initialize.call(this, options);
+
+            this.template = options.template;
+            this.currentsong = options.currentsong;
+
+            this.$el = $(this.template({
+                id: this.model.get('Id'),
+                artist: this.model.get('Artist'),
+                title: this.model.get('Title'),
+                playing: (this.currentsong.get('Id') === this.model.get('Id'))
+            }));
+
+            this.currentsong.on('change:Id', _.bind(this.update, this));
+        },
+
+        setPlayId: function () {
+            this.conncetion.send('playid', {
+                playid: this.model.get('Id')
+            });
         },
 
         update: function () {
+            if (this.currentsong.get('Id') === this.model.get('Id')) {
+                this.$el.addClass('playing');
+            } else {
+                this.$el.removeClass('playing');
+            }
+        },
+
+        /**
+         * @param {jQuery} $container
+         */
+        render: function ($container) {
+            $container.append(this.$el);
         }
     });
 }(window, jQuery));

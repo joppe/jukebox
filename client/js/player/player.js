@@ -65,6 +65,13 @@
                 model: this.models.status,
                 conncetion: connection
             });
+            new Player.View.Playlist({
+                el: $('.playlist'),
+                model: this.models.playlist,
+                currentsong: this.models.currentsong,
+                conncetion: connection,
+                $itemTemplate: $('#playlist-item')
+            });
         },
 
         update: function () {
