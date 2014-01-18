@@ -29,14 +29,18 @@
         this.$container = $container;
 
         this.models = {
-            playlist: new Player.Model.Playlist(),
+            playlistinfo: new Player.Model.Playlist(),
             currentsong: new Player.Model.Currentsong(),
             status: new Player.Model.Status()
         };
 
         connection.on('update', _.bind(function (data) {
-            if (data && data.action && this.models[data.action]) {
-                this.models[data.action].set(data.data);
+            var model = this.models[data.action],
+                parsedData;
+
+            if (data && data.action && model) {
+                parsedData = model.parse(data.data);
+                model.set(parsedData);
             }
         }, this));
 
@@ -67,7 +71,7 @@
             });
             new Player.View.Playlist({
                 el: $('.playlist'),
-                model: this.models.playlist,
+                model: this.models.playlistinfo,
                 currentsong: this.models.currentsong,
                 conncetion: connection,
                 $itemTemplate: $('#playlist-item')
