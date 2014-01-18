@@ -287,12 +287,30 @@
 
             this.$el = $(this.template({
                 id: this.model.get('Id'),
-                artist: this.model.get('Artist'),
-                title: this.model.get('Title'),
+                title: this.getTitle(),
                 playing: (this.currentsong.get('Id') === this.model.get('Id'))
             }));
 
             this.currentsong.on('change:Id', _.bind(this.update, this));
+        },
+
+        /**
+         * @returns {string}
+         */
+        getTitle: function () {
+            var title,
+                fields = [
+                    this.model.get('Title'),
+                    this.model.get('Artist')
+                ];
+
+            title = fields.join(' - ');
+
+            if (title === '') {
+                title = this.model.get('file');
+            }
+
+            return title;
         },
 
         setPlayId: function () {
