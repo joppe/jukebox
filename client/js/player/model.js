@@ -39,7 +39,8 @@
             var attributes = {};
 
             _.each(this.model, function (ClassName, identifier) {
-                var data = response[identifier];
+                var data = response[identifier],
+                    model;
 
                 if (ClassName === 'variant' || ClassName === 'string') {
                     attributes[identifier] = data;
@@ -47,9 +48,15 @@
                     data = parseInt(data, 10);
                     attributes[identifier] = isNaN(data) ? 0 : data;
                 } else {
-                    attributes[identifier] = new Model[ClassName](data, {
-                        parse: true
-                    });
+                    model = this.get(identifier);
+
+                    if (model) {
+                        model.set(model.parse(data));
+                    } else {
+                        attributes[identifier] = new Model[ClassName](data, {
+                            parse: true
+                        });
+                    }
                 }
             }, this);
 
@@ -76,6 +83,8 @@
     });
 
     Model.Song = Model.AbstractBase.extend({
+        idAttribute: 'Id',
+
         model: {
             Album: 'variant',
             Artist: 'variant',
