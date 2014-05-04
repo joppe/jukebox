@@ -31,7 +31,8 @@
         this.models = {
             playlistinfo: new Player.Model.Playlist(),
             currentsong: new Player.Model.Currentsong(),
-            status: new Player.Model.Status()
+            status: new Player.Model.Status(),
+            search: new Player.Model.Search()
         };
 
         connection.on('update', _.bind(function (data) {
@@ -76,12 +77,18 @@
                 conncetion: connection,
                 $itemTemplate: $('#playlist-item')
             });
+            new Player.View.Search({
+                el: $('.search'),
+                model: this.models.search,
+                conncetion: connection,
+                $itemTemplate: $('#search-result-item')
+            });
         },
 
         update: function () {
-            _.each(this.models, function (model) {
-                model.fetch();
-            });
+            this.models.playlistinfo.fetch();
+            this.models.currentsong.fetch();
+            this.models.status.fetch();
         }
     };
 
