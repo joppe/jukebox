@@ -37,9 +37,18 @@ html
                 a.bttn.glyphicon.glyphicon-volume-down(href='/mpd/volume')
                 span.volume
                 a.bttn.glyphicon.glyphicon-volume-up(href='/mpd/volume')
+        div.search
+            h3 Search
+            form
+                div.form-group
+                    input.form-control(type=text)
+            ul.results
         div.playlist
             h3 Playlist
             ol
+        script(type='text/js-template', id='search-result-item')
+            li
+                a(href='javascript:void(null);') <%= title %>
         script(type='text/js-template', id='playlist-item')
             li
                 a(href='javascript:void(null);') <%= title %>
