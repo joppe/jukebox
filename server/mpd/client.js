@@ -15,7 +15,13 @@ module.exports = (function () {
      * @returns {string}
      */
     function prepareArgument(arg) {
-        return '"' + arg.replace('"', '\\"') + '"';
+        if (undefined !== arg && '[object String]' === Object.prototype.toString.call(arg)) {
+            arg = '"' + arg.replace('"', '\\"') + '"';
+        } else {
+            arg = '';
+        }
+
+        return arg;
     }
 
     function create(connection) {
