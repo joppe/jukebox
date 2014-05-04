@@ -78,7 +78,7 @@ module.exports = (function () {
                 });
             });
 
-            expressApp.post('/' + urlPrefix + '/', function (req, res) {
+            expressApp.post('/' + urlPrefix + '/volume', function (req, res) {
                 var volume = parseInt(req.body.volume, 10);
 
                 if (false === isNaN(volume)) {
