@@ -53,6 +53,12 @@ io.sockets.on('connection', function (socket) {
         case 'playid':
             argument = data.attributes.playid;
             break;
+        case 'search':
+            argument = data.attributes.query;
+            break;
+        case 'addid':
+            argument = data.attributes.uri;
+            break;
         }
 
         mpdController.proxy(data.action, argument, function (response) {
@@ -71,7 +77,7 @@ io.sockets.on('connection', function (socket) {
     setTimeout(function () {
         ['status', 'currentsong', 'playlistinfo'].forEach(function (action) {
             mpdController.proxy(action, undefined, function (response) {
-                io.sockets.emit('update', {
+                io.sockets.emit('broadcast', {
                     data: response,
                     action: action
                 });
