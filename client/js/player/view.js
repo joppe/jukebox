@@ -1,4 +1,4 @@
-/*global window, Backbone, _*/
+/*global window, Backbone, _, Util*/
 
 (function (win, $) {
     'use strict';
@@ -11,27 +11,13 @@
 
     win.Player.View = View = {};
 
-    View.AbstractBase = Backbone.View.extend({
-        /**
-         * @param {Object} options
-         */
-        initialize: function (options) {
-            this.conncetion = options.conncetion;
-        }
-    });
-
-    View.Volume = View.AbstractBase.extend({
+    View.Volume = Backbone.View.extend({
         events: {
             'click .glyphicon-volume-down': 'volumeDown',
             'click .glyphicon-volume-up': 'volumeUp'
         },
 
-        /**
-         * @param {Object} options
-         */
-        initialize: function (options) {
-            View.AbstractBase.prototype.initialize.call(this, options);
-
+        initialize: function () {
             this.$percentage = this.$el.find('span.volume');
 
             this.model.on('change:volume', this.update, this);
@@ -42,31 +28,12 @@
         },
 
         /**
-         * @param {number} amount
-         */
-        volume: function (amount) {
-            var volume = parseInt(this.model.get('volume'), 10);
-
-            if (isNaN(volume)) {
-                volume = 0;
-            }
-
-            volume += amount;
-            volume = Math.max(volume, 0);
-            volume = Math.min(volume, 100);
-
-            this.conncetion.send('volume', {
-                volume: volume
-            });
-        },
-
-        /**
          * @param {Event} event
          */
         volumeDown: function (event) {
             event.preventDefault();
 
-            this.volume(-5);
+            this.model.setVolume(-5);
         },
 
         /**
@@ -75,17 +42,12 @@
         volumeUp: function (event) {
             event.preventDefault();
 
-            this.volume(5);
+            this.model.setVolume(5);
         }
     });
 
-    View.CurrentSong = View.AbstractBase.extend({
-        /**
-         * @param {Object} options
-         */
-        initialize: function (options) {
-            View.AbstractBase.prototype.initialize.call(this, options);
-
+    View.CurrentSong = Backbone.View.extend({
+        initialize: function () {
             this.$artist = this.$el.find('div.artist');
             this.$song = this.$el.find('div.song');
 
@@ -98,14 +60,8 @@
         }
     });
 
-    View.Progress = View.AbstractBase.extend({
-
-        /**
-         * @param {Object} options
-         */
-        initialize: function (options) {
-            View.AbstractBase.prototype.initialize.call(this, options);
-
+    View.Progress = Backbone.View.extend({
+        initialize: function () {
             this.$bar = this.$el.find('div.bar');
             this.$played = this.$el.find('span.played');
             this.$total = this.$el.find('span.total');
@@ -114,61 +70,19 @@
         },
 
         update: function () {
-            var timeParts = this.model.get('time').split(':'),
-                played = timeParts[0],
-                total = timeParts[1];
+            var played = this.model.getTimePlayed(),
+                total = this.model.getTotalTime();
 
             this.$bar.css({
                 width: Math.round((played / total) * 100) + '%'
             });
-            this.$played.text(this.toTime(played));
-            this.$total.text(this.toTime(total));
-        },
-
-        /**
-         * @param {number} seconds
-         * @returns {string}
-         */
-        toTime: function (seconds) {
-            var parts = [60 * 60, 60, 1],
-                time = [];
-
-            _.each(parts, function (value) {
-                var t = Math.floor(seconds / value);
-
-                seconds -= (t * value);
-                time.push(this.strPad('' + t, 2, '0'));
-            }, this);
-
-            return time.join(':');
-        },
-
-        /**
-         * @param {string} str
-         * @param {number} length
-         * @param {string} char
-         * @returns {string}
-         */
-        strPad: function (str, length, char) {
-            var padLength = length - str.length;
-
-            if (padLength === 1) {
-                str = char + str;
-            } else if (padLength > 1) {
-                str = new Array(padLength + 1).join(char) + str;
-            }
-
-            return str;
+            this.$played.text(Util.toTime(played));
+            this.$total.text(Util.toTime(total));
         }
     });
 
-    View.Controls = View.AbstractBase.extend({
-        /**
-         * @param {Object} options
-         */
-        initialize: function (options) {
-            View.AbstractBase.prototype.initialize.call(this, options);
-
+    View.Controls = Backbone.View.extend({
+        initialize: function () {
             this.$play = this.$el.find('a.glyphicon-play');
             this.$next = this.$el.find('a.glyphicon-step-forward');
             this.$previous = this.$el.find('a.glyphicon-step-backward');
@@ -186,7 +100,7 @@
 
                 event.preventDefault();
 
-                self.command($anchor.attr('href'));
+                self.model.setCommand($anchor.attr('href'));
             });
 
             this.$previous.on('click', function (event) {
@@ -194,7 +108,7 @@
 
                 event.preventDefault();
 
-                self.command($anchor.attr('href'));
+                self.model.setCommand($anchor.attr('href'));
             });
 
             this.$play.on('click', function (event) {
@@ -203,18 +117,11 @@
                 event.preventDefault();
 
                 if (self.model.get('state') === 'play') {
-                    self.command($anchor.data('pause'));
+                    self.model.setCommand($anchor.data('pause'));
                 } else {
-                    self.command($anchor.data('play'));
+                    self.model.setCommand($anchor.data('play'));
                 }
             });
-        },
-
-        /**
-         * @param {string} url
-         */
-        command: function (url) {
-            this.conncetion.send(url);
         },
 
         update: function () {
@@ -228,13 +135,12 @@
         }
     });
 
-    View.Playlist = View.AbstractBase.extend({
+    View.Playlist = Backbone.View.extend({
         /**
          * @param {Object} options
          */
         initialize: function (options) {
-            View.AbstractBase.prototype.initialize.call(this, options);
-
+            this.status = options.status;
             this.$itemContainer = this.$el.find('ol');
             this.currentsong = options.currentsong;
             this.itemTemplate = _.template(options.$itemTemplate.html());
@@ -253,12 +159,15 @@
             this.$itemContainer.empty();
         },
 
+        /**
+         * @param {Model.Song} song
+         */
         add: function (song) {
             (new View.PlaylistItem({
                 model: song,
                 template: this.itemTemplate,
                 currentsong: this.currentsong,
-                conncetion: this.conncetion
+                status: this.status
             })).render(this.$itemContainer);
         },
 
@@ -271,7 +180,7 @@
         }
     });
 
-    View.PlaylistItem = View.AbstractBase.extend({
+    View.PlaylistItem = Backbone.View.extend({
         events: {
             'click a': 'setPlayId'
         },
@@ -280,43 +189,21 @@
          * @param {Object} options
          */
         initialize: function (options) {
-            View.AbstractBase.prototype.initialize.call(this, options);
-
             this.template = options.template;
             this.currentsong = options.currentsong;
+            this.status = options.status;
 
             this.$el = $(this.template({
                 id: this.model.get('Id'),
-                title: this.getTitle(),
+                title: this.model.getTitle(),
                 playing: (this.currentsong.get('Id') === this.model.get('Id'))
             }));
 
             this.currentsong.on('change:Id', _.bind(this.update, this));
         },
 
-        /**
-         * @returns {string}
-         */
-        getTitle: function () {
-            var title,
-                fields = [
-                    this.model.get('Title'),
-                    this.model.get('Artist')
-                ];
-
-            title = fields.join(' - ');
-
-            if (title === '') {
-                title = this.model.get('file');
-            }
-
-            return title;
-        },
-
         setPlayId: function () {
-            this.conncetion.send('playid', {
-                playid: this.model.get('Id')
-            });
+            this.status.setCurrentSong(this.model);
         },
 
         update: function () {
@@ -334,4 +221,91 @@
             $container.append(this.$el);
         }
     });
+
+    View.Search = Backbone.View.extend({
+        events: {
+            'keyup input': 'search'
+        },
+
+        /**
+         * @param {Object} options
+         */
+        initialize: function (options) {
+            this.status = options.status;
+            this.$input = this.$el.find('input');
+            this.$itemContainer = this.$el.find('ul.results');
+            this.itemTemplate = _.template(options.$itemTemplate.html());
+
+            this.results = this.model.get('songs');
+            this.results.on('add', this.add, this);
+            this.results.on('remove', this.remove, this);
+
+            this.render();
+        },
+
+        search: function () {
+            this.model.save({
+                query: this.$input.val()
+            });
+        },
+
+        remove: function () {
+            this.render();
+        },
+
+        reset: function () {
+            this.$itemContainer.empty();
+        },
+
+        /**
+         * @param {Model.Song} song
+         */
+        add: function (song) {
+            (new View.SearchResultItem({
+                model: song,
+                template: this.itemTemplate,
+                status: this.status
+            })).render(this.$itemContainer);
+        },
+
+        render: function () {
+            this.reset();
+
+            this.results.each(function (song) {
+                this.add(song);
+            }, this);
+        }
+    });
+
+    View.SearchResultItem = Backbone.View.extend({
+        events: {
+            'click a': 'addToPlayList'
+        },
+
+        /**
+         * @param {Object} options
+         */
+        initialize: function (options) {
+            this.status = options.status;
+            this.template = options.template;
+
+            this.$el = $(this.template({
+                id: this.model.get('Id'),
+                title: this.model.getTitle()
+            }));
+        },
+
+        addToPlayList: function () {
+            this.status.addSongToPlayList(this.model);
+        },
+
+        /**
+         * @param {jQuery} $container
+         */
+        render: function ($container) {
+            $container.append(this.$el);
+        }
+    });
+
+
 }(window, jQuery));

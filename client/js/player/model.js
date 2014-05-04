@@ -18,20 +18,6 @@
         model: {},
 
         /**
-         * @param {Object} [attributes]
-         * @param {Object} [options]
-         */
-        initialize: function (attributes, options) {
-            if (options) {
-                this.options = options;
-
-                if (options.urlRoot) {
-                    this.urlRoot = options.urlRoot;
-                }
-            }
-        },
-
-        /**
          * @param {Object} response
          * @returns {Object}
          */
@@ -79,6 +65,79 @@
             volume: 'variant',
             xfade: 'variant',
             time: 'variant'
+        },
+
+        /**
+         * @param {Object} [attributes]
+         * @param {Object} [options]
+         */
+        initialize: function (attributes, options) {
+            this.connection = options.connection;
+        },
+
+        /**
+         * @param {Number} amount
+         */
+        setVolume: function (amount) {
+            var volume = parseInt(this.get('volume'), 10);
+
+            if (isNaN(volume)) {
+                volume = 0;
+            }
+
+            volume += amount;
+            volume = Math.max(volume, 0);
+            volume = Math.min(volume, 100);
+
+            this.connection.send('volume', {
+                volume: volume
+            });
+        },
+
+        /**
+         * @param {string} command
+         */
+        setCommand: function (command) {
+            this.connection.send(command);
+        },
+
+        /**
+         * @param {Model.Song} song
+         */
+        setCurrentSong: function (song) {
+            this.connection.send('playid', {
+                playid: song.get('Id')
+            });
+        },
+
+        /**
+         * @param {Model.Song} song
+         */
+        addSongToPlayList: function (song) {
+            console.log(song.get('file'));
+            this.connection.send('addid', {
+                uri: song.get('file')
+            }, function () {
+                console.log(arguments);
+            });
+        },
+
+        /**
+         * @returns {Number}
+         */
+        getTimePlayed: function () {
+            var timeParts = this.get('time').split(':');
+
+            return parseInt(timeParts[0], 10);
+        },
+
+        /**
+         * @returns {Number}
+         */
+        getTotalTime: function () {
+            var timeParts = this.get('time').split(':');
+
+            return parseInt(timeParts[1], 10);
         }
     });
 
@@ -135,8 +194,22 @@
         }
     });
 
-    Model.Search = Model.Playlist.extend({
-        url: 'search'
+    Model.Search = Model.AbstractBase.extend({
+        url: 'search',
+
+        defaults: function () {
+            return {
+                songs: new Model.Results()
+            };
+        },
+
+        model: {
+            songs: 'Results'
+        }
+    });
+
+    Model.Results = Backbone.Collection.extend({
+        model: Model.Song
     });
 
 }(window));
