@@ -114,11 +114,8 @@
          * @param {Model.Song} song
          */
         addSongToPlayList: function (song) {
-            console.log(song.get('file'));
             this.connection.send('addid', {
                 uri: song.get('file')
-            }, function () {
-                console.log(arguments);
             });
         },
 
@@ -205,6 +202,18 @@
 
         model: {
             songs: 'Results'
+        },
+
+        search: function (query) {
+            query = query.replace(/^\s*|\s*$/i, '');
+
+            if (query.length > 1) {
+                this.save({
+                    query: query
+                });
+            } else {
+                this.get('songs').reset([]);
+            }
         }
     });
 

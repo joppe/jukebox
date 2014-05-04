@@ -239,14 +239,13 @@
             this.results = this.model.get('songs');
             this.results.on('add', this.add, this);
             this.results.on('remove', this.remove, this);
+            this.results.on('reset', this.reset, this);
 
             this.render();
         },
 
         search: function () {
-            this.model.save({
-                query: this.$input.val()
-            });
+            this.model.search(this.$input.val());
         },
 
         remove: function () {
