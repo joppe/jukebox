@@ -16,9 +16,11 @@ module.exports = (function () {
      *
      * @param {number} port
      * @param {string} host
+     * @param {Function} onsuccess
+     * @param {Function} onerror
      * @returns {{connect: Function, command: Function, processQueue: Function}}
      */
-    function create(port, host) {
+    function create(port, host, onsuccess, onerror) {
         var socket,
             connected = false,
             inprogress = false,
@@ -30,11 +32,7 @@ module.exports = (function () {
             };
 
         socket = {
-            /**
-             * @param {Function} onsuccess
-             * @param {Function} onerror
-             */
-            connect: function (onsuccess, onerror) {
+            connect: function () {
                 client = net.connect(parameters);
 
                 client.on('connect', function () {
@@ -85,7 +83,7 @@ module.exports = (function () {
                     inprogress = true;
                     client.write(queue[0].command + '\n');
                 } else if (false === connected) {
-                    console.log('Reconnect, conncetion was dropped');
+                    console.log('Reconnect, connection was dropped');
                     socket.connect();
                 }
             }
@@ -105,7 +103,7 @@ module.exports = (function () {
         connect: function (port, host, onsuccess, onerror) {
             var socket = create(port, host, onsuccess, onerror);
 
-            socket.connect(onsuccess, onerror);
+            socket.connect();
 
             return {
                 /**
