@@ -97,6 +97,25 @@
             Title: 'variant',
             Track: 'variant',
             file: 'variant'
+        },
+
+        /**
+         * @returns {string}
+         */
+        getTitle: function () {
+            var title,
+                fields = [
+                    this.get('Title'),
+                    this.get('Artist')
+                ];
+
+            title = fields.join(' - ');
+
+            if (title === '') {
+                title = this.get('file');
+            }
+
+            return title;
         }
     });
 
@@ -114,6 +133,10 @@
 
             return response;
         }
+    });
+
+    Model.Search = Model.Playlist.extend({
+        url: 'search'
     });
 
 }(window));
