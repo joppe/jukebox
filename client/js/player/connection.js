@@ -38,8 +38,10 @@
 
                 delete this.pool[data.syncId];
             }
+        }, this));
 
-            this.trigger('update', data);
+        this.socket.on('broadcast', _.bind(function (data) {
+            this.trigger('broadcast', data);
         }, this));
     };
 
