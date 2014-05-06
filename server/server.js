@@ -9,9 +9,8 @@ var express = require('express'),
     io = require('socket.io').listen(server, {log: false});
 
 // express configuration
-app.use(express.bodyParser());
-app.use(express.methodOverride());
-app.use(app.router);
+app.use(require('body-parser')());
+app.use(require('method-override')());
 app.use(express.static(__dirname + '/../client'));
 
 app.set('title', 'Jukebox');
