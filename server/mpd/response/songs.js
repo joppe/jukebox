@@ -22,7 +22,9 @@ module.exports = (function () {
                     song = {};
                 }
 
-                song[property.name] = property.value;
+                if (song !== null) {
+                    song[property.name] = property.value;
+                }
             }
         });
 
